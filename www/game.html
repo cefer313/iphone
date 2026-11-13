@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="az">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#1d3b3a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <title>Fikir Tutan — oyun</title>
+  <style>
+    :root {
+      --bg: #fbf8f3; --text: #1f1d1a; --muted: #6b655c;
+      --accent: #e2632f; --deep: #1d3b3a; --good: #2f8f5b; --bad: #c0392b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; background: var(--deep); overflow: hidden; touch-action: none;
+      font-family: -apple-system, "Manrope", system-ui, sans-serif; color: var(--text);
+      user-select: none; -webkit-user-select: none; }
+    #wrap { position: fixed; inset: 0; display: flex; flex-direction: column;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+    #hud { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;
+      color: #fff; font-weight: 700; font-size: 18px; }
+    #hud a { color: #fff; text-decoration: none; opacity: .8; font-size: 15px; }
+    #lives { letter-spacing: 2px; }
+    canvas { flex: 1; width: 100%; display: block; background: var(--bg); border-radius: 18px 18px 0 0; }
+    .overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(29, 59, 58, .85); padding: 16px; }
+    .overlay.hidden { display: none; }
+    .card { background: var(--bg); border-radius: 22px; padding: 28px 22px; max-width: 360px; width: 100%;
+      text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .card h1 { font-size: 28px; color: var(--deep); margin-bottom: 10px; }
+    .card p { color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
+    .card .big { font-size: 44px; font-weight: 800; color: var(--accent); margin: 8px 0; }
+    .card button { margin-top: 16px; background: var(--accent); color: #fff; border: 0; border-radius: 999px;
+      padding: 14px 34px; font-size: 18px; font-weight: 700; cursor: pointer; }
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 999px; color: #fff; font-size: 14px; font-weight: 700; }
+  </style>
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <a href="index.html">← Geri</a>
+    <span id="score">⭐ 0</span>
+    <span id="lives">❤️❤️❤️</span>
+  </div>
+  <canvas id="c"></canvas>
+</div>
+
+<div class="overlay" id="start">
+  <div class="card">
+    <h1>Fikir Tutan</h1>
+    <p>Barmağınla səbəti sürüşdür.</p>
+    <p><span class="tag" style="background:var(--good)">Müsbət</span> fikirləri tut — +1 xal</p>
+    <p><span class="tag" style="background:var(--bad)">Mənfi</span> fikirlərdən qaç — can gedir</p>
+    <p>Rekord: <b id="bestStart">0</b></p>
+    <button id="playBtn">Başla</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="over">
+  <div class="card">
+    <h1>Oyun bitdi</h1>
+    <div class="big" id="final">0</div>
+    <p id="msg"></p>
+    <p>Rekord: <b id="bestOver">0</b></p>
+    <button id="againBtn">Yenidən</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const GOOD = ['Bacararam', 'Güclüyəm', 'Hər gün irəli', 'Özümə inanıram', 'Sakitəm',
+    'Öyrənirəm', 'Minnətdaram', 'Cəsarətliyəm', 'Yeni gün', 'Mən dəyərliyəm'];
+  const BAD = ['Bacarmıram', 'Gec oldu', 'Mən zəifəm', 'Heç vaxt', 'Qorxuram', 'Mümkün deyil'];
+  const MSGS = ['Hər cəhd səni gücləndirir!', 'Əla nəticə — davam et!', 'Baxışını dəyiş, nəticə dəyişəcək!',
+    'Bu gün dünəndən yaxşısan!'];
+
+  const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+  const $ = id => document.getElementById(id);
+  let W, H, dpr, basket, items, score, lives, speed, spawnT, running = false, last = 0, pops;
+
+  const best = () => { try { return +localStorage.getItem('fikirBest') || 0; } catch { return 0; } };
+  const saveBest = v => { try { localStorage.setItem('fikirBest', v); } catch {} };
+  $('bestStart').textContent = best();
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    const r = cv.getBoundingClientRect();
+    W = r.width; H = r.height;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (basket) basket.y = H - 40;
+  }
+  addEventListener('resize', resize);
+
+  function reset() {
+    resize();
+    basket = { x: W / 2, y: H - 40, w: Math.min(120, W * 0.3), h: 26 };
+    items = []; pops = []; score = 0; lives = 3; speed = 1.6; spawnT = 0;
+    hud();
+  }
+
+  function hud() {
+    $('score').textContent = '⭐ ' + score;
+    $('lives').textContent = '❤️'.repeat(lives) + '🤍'.repeat(3 - lives);
+  }
+
+  function spawn() {
+    const good = Math.random() < 0.65;
+    const text = (good ? GOOD : BAD)[Math.floor(Math.random() * (good ? GOOD : BAD).length)];
+    ctx.font = '700 15px -apple-system, system-ui, sans-serif';
+    const w = ctx.measureText(text).width + 24;
+    items.push({ x: w / 2 + Math.random() * (W - w), y: -20, w, h: 32, text, good,
+      v: speed * (0.8 + Math.random() * 0.5) });
+  }
+
+  // Səbəti barmaqla / siçanla idarə et
+  function move(e) {
+    if (!running) return;
+    const r = cv.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    basket.x = Math.max(basket.w / 2, Math.min(W - basket.w / 2, x));
+  }
+  cv.addEventListener('touchstart', move, { passive: true });
+  cv.addEventListener('touchmove', move, { passive: true });
+  cv.addEventListener('mousemove', move);
+  const keys = {};
+  addEventListener('keydown', e => keys[e.key] = true);
+  addEventListener('keyup', e => keys[e.key] = false);
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function step(t) {
+    if (!running) return;
+    const dt = Math.min(2.5, (t - last) / 16.67 || 1); last = t;
+
+    if (keys.ArrowLeft) basket.x = Math.max(basket.w / 2, basket.x - 8 * dt);
+    if (keys.ArrowRight) basket.x = Math.min(W - basket.w / 2, basket.x + 8 * dt);
+
+    spawnT -= dt;
+    if (spawnT <= 0) { spawn(); spawnT = Math.max(22, 60 - score * 1.2); }
+    speed = 1.6 + score * 0.06;
+
+    for (let i = items.length - 1; i >= 0; i--) {
+      const it = items[i];
+      it.y += it.v * dt;
+      const hit = it.y + it.h / 2 >= basket.y - basket.h / 2 && it.y - it.h / 2 <= basket.y + basket.h / 2 &&
+        Math.abs(it.x - basket.x) < (basket.w + it.w) / 2 - 6;
+      if (hit) {
+        items.splice(i, 1);
+        if (it.good) { score++; pops.push({ x: it.x, y: it.y, txt: '+1', c: '#2f8f5b', a: 1 }); }
+        else { lives--; pops.push({ x: it.x, y: it.y, txt: '−❤️', c: '#c0392b', a: 1 });
+          if (navigator.vibrate) navigator.vibrate(80); }
+        hud();
+        if (lives <= 0) return end();
+      } else if (it.y - it.h > H) {
+        items.splice(i, 1);
+      }
+    }
+    draw(dt);
+    requestAnimationFrame(step);
+  }
+
+  function draw(dt) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '700 15px -apple-system, system-ui, sans-serif';
+    for (const it of items) {
+      ctx.fillStyle = it.good ? '#2f8f5b' : '#c0392b';
+      roundRect(it.x - it.w / 2, it.y - it.h / 2, it.w, it.h, 16); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.fillText(it.text, it.x, it.y + 1);
+    }
+    // səbət
+    ctx.fillStyle = '#e2632f';
+    roundRect(basket.x - basket.w / 2, basket.y - basket.h / 2, basket.w, basket.h, 13); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = '800 13px -apple-system, system-ui, sans-serif';
+    ctx.fillText('MƏN', basket.x, basket.y + 1);
+    // xal effektləri
+    ctx.font = '800 20px -apple-system, system-ui, sans-serif';
+    for (let i = pops.length - 1; i >= 0; i--) {
+      const p = pops[i]; p.y -= 1.2 * dt; p.a -= 0.025 * dt;
+      if (p.a <= 0) { pops.splice(i, 1); continue; }
+      ctx.globalAlpha = p.a; ctx.fillStyle = p.c; ctx.fillText(p.txt, p.x, p.y);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function start() {
+    $('start').classList.add('hidden'); $('over').classList.add('hidden');
+    reset(); running = true; last = performance.now(); requestAnimationFrame(step);
+  }
+
+  function end() {
+    running = false;
+    const b = Math.max(best(), score); saveBest(b);
+    $('final').textContent = score;
+    $('bestOver').textContent = b; $('bestStart').textContent = b;
+    $('msg').textContent = MSGS[Math.floor(Math.random() * MSGS.length)];
+    $('over').classList.remove('hidden');
+  }
+
+  $('playBtn').onclick = start;
+  $('againBtn').onclick = start;
+  resize();
+})();
+</script>
+</body>
+</html>
