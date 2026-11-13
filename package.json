@@ -1,0 +1,21 @@
+{
+  "name": "baxisini-deyis",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Baxışını dəyiş — motivasiya və şəxsi inkişaf (web + iOS + Android)",
+  "scripts": {
+    "sync": "cap sync",
+    "android": "cap sync android && cap open android",
+    "ios": "cap sync ios && cap open ios",
+    "serve": "npx --yes http-server www -p 8080 -c-1"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.6.10",
+    "@capacitor/core": "^7.6.10",
+    "@capacitor/ios": "^7.6.10"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.6.10"
+  }
+}

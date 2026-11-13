@@ -93,4 +93,9 @@
 
   document.getElementById('year').textContent = new Date().getFullYear();
   applyLang(lang);
+
+  // PWA: offline dəstəyi (yalnız http/https-də işləyir)
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
 })();
