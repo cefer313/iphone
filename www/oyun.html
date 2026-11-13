@@ -12,6 +12,7 @@
   --bg:#0b1a2e; --bg2:#12284a; --panel:#152d52; --line:#2c4f80;
   --gold:#e8b84a; --gold2:#f6d98a; --text:#eef3fb; --muted:#9fb3d1;
   --ok:#22a861; --bad:#d64545; --sel:#e8892a;
+  color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -309,6 +310,7 @@ function start(){
 function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id)); window.scrollTo(0,0); }
 
 function next(){
+  resetQuit();
   const lv=lvlFor(level);
   const raw = deck[lv].pop();
   cur = {...raw, opts: shuffle(raw.a), right: raw.a[0]};
@@ -427,10 +429,16 @@ $('lSwap').onclick=()=>{
   clearInterval(timerId); next();
 };
 
+// İkiqat toxunuşla təsdiq (brauzer pəncərəsi olmadan)
+let quitArmed=null;
+function resetQuit(){ clearTimeout(quitArmed); quitArmed=null; $('quitBtn').textContent='💰 Pulu götür'; }
 $('quitBtn').onclick=()=>{
   if(locked && !$('nextBtn').classList.contains('on')) return;
-  if(!confirm(`${fmt(bank)} ilə oyunu bitirmək istəyirsən?`)) return;
-  finish('quit');
+  if(!quitArmed){
+    $('quitBtn').textContent=`Təsdiqlə: ${fmt(bank)}`;
+    quitArmed=setTimeout(resetQuit,3000); return;
+  }
+  resetQuit(); finish('quit');
 };
 $('nextBtn').onclick=next;
 $('startBtn').onclick=start;
