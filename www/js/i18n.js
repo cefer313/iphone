@@ -2,7 +2,7 @@
 window.I18N = {
   az: {
     'nav.about': 'Haqqımızda', 'nav.programs': 'Proqramlar', 'nav.articles': 'Məqalələr',
-    'nav.reviews': 'Rəylər', 'nav.contact': 'Əlaqə',
+    'nav.reviews': 'Rəylər', 'nav.contact': 'Əlaqə', 'nav.game': '🎮 Oyun',
     'hero.eyebrow': 'Motivasiya və şəxsi inkişaf',
     'hero.title': 'Dünyanı dəyişmək üçün əvvəlcə baxışını dəyiş.',
     'hero.lead': 'Düşüncə tərzini yenilə, məqsədlərini aydınlaşdır və hər gün özünün daha yaxşı versiyasına doğru addım at.',
@@ -45,7 +45,7 @@ window.I18N = {
   },
   ru: {
     'nav.about': 'О нас', 'nav.programs': 'Программы', 'nav.articles': 'Статьи',
-    'nav.reviews': 'Отзывы', 'nav.contact': 'Контакты',
+    'nav.reviews': 'Отзывы', 'nav.contact': 'Контакты', 'nav.game': '🎮 Игра',
     'hero.eyebrow': 'Мотивация и личностный рост',
     'hero.title': 'Чтобы изменить мир, сначала измени свой взгляд.',
     'hero.lead': 'Обнови мышление, проясни цели и каждый день делай шаг к лучшей версии себя.',
@@ -88,7 +88,7 @@ window.I18N = {
   },
   en: {
     'nav.about': 'About', 'nav.programs': 'Programs', 'nav.articles': 'Articles',
-    'nav.reviews': 'Reviews', 'nav.contact': 'Contact',
+    'nav.reviews': 'Reviews', 'nav.contact': 'Contact', 'nav.game': '🎮 Game',
     'hero.eyebrow': 'Motivation & personal growth',
     'hero.title': 'To change the world, first change your view.',
     'hero.lead': 'Refresh your mindset, clarify your goals and step closer to the best version of yourself every day.',
