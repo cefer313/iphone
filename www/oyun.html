@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Nur Yarışı</title>
+<meta name="description" content="Dini biliklər üzrə sual-cavab oyunu: düz cavab ver, manat qazan.">
+<style>
+:root{
+  --bg:#0b1a2e; --bg2:#12284a; --panel:#152d52; --line:#2c4f80;
+  --gold:#e8b84a; --gold2:#f6d98a; --text:#eef3fb; --muted:#9fb3d1;
+  --ok:#22a861; --bad:#d64545; --sel:#e8892a;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(ellipse at 50% -10%, #23467a 0%, transparent 60%),
+    repeating-conic-gradient(from 22.5deg, rgba(232,184,74,.035) 0 12.5%, transparent 0 25%) 0 0/56px 56px,
+    var(--bg);
+  min-height:100%;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+.screen{display:none;min-height:100vh;min-height:100dvh}
+.screen.on{display:flex}
+
+/* ---------- Start / End ---------- */
+.center{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 16px;gap:18px}
+.emblem{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle,#2b5592,#12284a);border:2px solid var(--gold);
+  box-shadow:0 0 40px rgba(232,184,74,.35);font-size:44px}
+h1{font-size:clamp(30px,8vw,48px);letter-spacing:.5px;color:var(--gold2)}
+.sub{color:var(--muted);max-width:460px;line-height:1.5}
+.rules{background:rgba(21,45,82,.8);border:1px solid var(--line);border-radius:16px;padding:16px 18px;
+  text-align:left;max-width:460px;width:100%;line-height:1.6;font-size:15px}
+.rules li{margin-left:18px}
+.rules b{color:var(--gold2)}
+.btn{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1b1405;font-weight:800;
+  padding:15px 34px;border-radius:999px;font-size:18px;box-shadow:0 6px 20px rgba(232,184,74,.35);transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.btn.ghost{background:transparent;color:var(--gold2);border:2px solid var(--gold);box-shadow:none}
+.best{color:var(--muted);font-size:14px}
+.prize-big{font-size:clamp(36px,10vw,60px);font-weight:900;color:var(--gold2);text-shadow:0 0 30px rgba(232,184,74,.4)}
+
+/* ---------- Game layout ---------- */
+#game{flex-direction:column;max-width:1100px;margin:0 auto;padding:12px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.bank{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:14px;color:var(--muted)}
+.bank b{color:var(--gold2);font-size:17px}
+.quit{background:transparent;border:1.5px solid var(--gold);color:var(--gold2);padding:8px 12px;border-radius:12px;font-weight:700;font-size:14px}
+.main{display:grid;grid-template-columns:1fr 230px;gap:14px;flex:1}
+.play{display:flex;flex-direction:column;gap:14px;min-width:0}
+
+.lifelines{display:flex;gap:10px;justify-content:center}
+.life{width:62px;height:42px;border-radius:50%/50%;border:2px solid var(--gold);background:var(--panel);
+  font-weight:800;font-size:13px;color:var(--gold2);display:grid;place-items:center;transition:.2s}
+.life:disabled{opacity:.3;filter:grayscale(1);cursor:default;text-decoration:line-through}
+
+.timer{position:relative;width:64px;height:64px;margin:0 auto}
+.timer svg{transform:rotate(-90deg)}
+.timer span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:20px}
+.timer.low span{color:var(--bad)}
+
+.qbox{background:linear-gradient(180deg,#1b3a68,#122a4d);border:2px solid var(--gold);border-radius:18px;
+  padding:18px 16px;text-align:center;font-size:clamp(17px,4.4vw,22px);line-height:1.4;font-weight:600;
+  box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.qnum{display:block;font-size:13px;color:var(--gold2);font-weight:700;margin-bottom:6px;letter-spacing:.5px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ans{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:14px 12px;text-align:left;
+  font-size:clamp(15px,3.8vw,18px);display:flex;gap:8px;align-items:center;min-height:56px;transition:background .2s,border-color .2s}
+.ans .l{color:var(--gold2);font-weight:800}
+.ans:not(:disabled):hover{border-color:var(--gold)}
+.ans.hide{visibility:hidden}
+.ans.sel{background:var(--sel);border-color:#ffc27a;color:#fff}
+.ans.sel .l{color:#fff}
+.ans.ok{background:var(--ok);border-color:#7ff0b0;color:#fff;animation:blink .35s 3}
+.ans.ok .l,.ans.bad .l{color:#fff}
+.ans.bad{background:var(--bad);border-color:#ff9a9a;color:#fff}
+@keyframes blink{50%{filter:brightness(1.4)}}
+
+.info{background:rgba(21,45,82,.85);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.5;display:none}
+.info.on{display:block}
+.info .t{font-weight:800;margin-bottom:4px}
+.info .t.good{color:#6fe3a3}.info .t.wrong{color:#ff8a8a}
+.poll{display:flex;gap:10px;align-items:flex-end;justify-content:center;height:110px;margin-top:6px}
+.poll div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;font-size:13px;width:44px}
+.poll i{display:block;width:30px;background:linear-gradient(180deg,var(--gold2),var(--gold));border-radius:6px 6px 0 0;transition:height .8s}
+.next{align-self:center;display:none}
+.next.on{display:inline-block}
+
+/* ---------- Ladder (right side) ---------- */
+.ladder{background:rgba(13,30,56,.92);border:1px solid var(--line);border-radius:16px;padding:8px;
+  display:flex;flex-direction:column-reverse;gap:2px;align-self:start}
+.step{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;border-radius:8px;font-size:15px;font-weight:700;color:var(--muted)}
+.step .n{opacity:.7;font-size:12px;width:22px}
+.step.safe{color:#fff}
+.step.safe .m::after{content:" ◆";color:var(--gold);font-size:11px}
+.step.done{color:var(--gold2)}
+.step.cur{background:linear-gradient(90deg,var(--gold),var(--gold2));color:#1b1405}
+.step.cur .n{opacity:1}
+.step.lost{background:var(--bad);color:#fff}
+
+/* phone: keep ladder on the right, just narrower */
+@media (max-width:700px){
+  #game{padding:8px}
+  .main{grid-template-columns:1fr 104px;gap:8px}
+  .answers{grid-template-columns:1fr}
+  .ans{min-height:48px;padding:11px 10px}
+  .step{padding:3px 5px;font-size:11.5px}
+  .step .n{display:none}
+  .ladder{padding:5px}
+  .life{width:54px;height:38px;font-size:12px}
+  .timer{width:54px;height:54px}.timer svg{width:54px;height:54px}
+  .qbox{padding:14px 12px}
+}
+
+.flash{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .3s}
+.flash.g{background:radial-gradient(circle,rgba(34,168,97,.35),transparent 70%);opacity:1}
+.flash.r{background:radial-gradient(circle,rgba(214,69,69,.4),transparent 70%);opacity:1}
+.sound{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));width:40px;height:40px;border-radius:50%;
+  background:var(--panel);border:1px solid var(--line);font-size:18px;z-index:5}
+.back{color:var(--muted);font-size:14px;text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen center on" id="start">
+  <div class="emblem">☪</div>
+  <h1>Nur Yarışı</h1>
+  <p class="sub">Dini biliklərini yoxla! Hər düz cavab səni növbəti pilləyə qaldırır — 1 000 000 manata qədər.</p>
+  <ul class="rules">
+    <li><b>15 sual</b>, hər biri əvvəlkindən çətin.</li>
+    <li>Düz cavab — pul artır. <b>Səhv cavab</b> — qazandığın pulu itirirsən, yalnız son <b>◆ zəmanətli məbləğ</b> qalır (1 000 ₼ və 32 000 ₼).</li>
+    <li>Hər suala <b>30 saniyə</b> vaxt var (son suallara 45 saniyə).</li>
+    <li>3 köməkçi: <b>50:50</b>, <b>Zal</b> (tamaşaçı səsi), <b>Dəyiş</b> (sualı dəyiş).</li>
+    <li>İstədiyin an <b>“Pulu götür”</b> deyib qazandığınla çıxa bilərsən.</li>
+  </ul>
+  <button class="btn" id="startBtn">Oyuna başla</button>
+  <p class="best" id="bestTxt"></p>
+  <a class="back" href="index.html">← Ana səhifə</a>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="game">
+  <div class="top">
+    <div class="bank">Qazanc: <b id="bankTxt">0 ₼</b></div>
+    <button class="quit" id="quitBtn">💰 Pulu götür</button>
+  </div>
+  <div class="main">
+    <div class="play">
+      <div class="lifelines">
+        <button class="life" id="l50" title="İki səhv cavabı sil">50:50</button>
+        <button class="life" id="lAud" title="Tamaşaçılardan soruş">Zal</button>
+        <button class="life" id="lSwap" title="Sualı dəyiş">Dəyiş</button>
+      </div>
+      <div class="timer" id="timer">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="28" stroke="#2c4f80" stroke-width="6" fill="none"/>
+          <circle id="tArc" cx="32" cy="32" r="28" stroke="#e8b84a" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="175.9" stroke-dashoffset="0"/>
+        </svg>
+        <span id="tTxt">30</span>
+      </div>
+      <div class="qbox"><span class="qnum" id="qNum"></span><span id="qTxt"></span></div>
+      <div class="answers" id="answers"></div>
+      <div class="info" id="info"></div>
+      <button class="btn next" id="nextBtn">Növbəti sual →</button>
+    </div>
+    <aside class="ladder" id="ladder"></aside>
+  </div>
+</section>
+
+<!-- END -->
+<section class="screen center" id="end">
+  <div class="emblem" id="endIcon">🏆</div>
+  <h1 id="endTitle"></h1>
+  <p class="sub" id="endSub"></p>
+  <div class="prize-big" id="endPrize"></div>
+  <button class="btn" id="againBtn">Yenidən oyna</button>
+  <a class="back" href="index.html">← Ana səhifə</a>
+</section>
+
+<div class="flash" id="flash"></div>
+<button class="sound" id="soundBtn" aria-label="Səs">🔊</button>
+
+<script>
+// ---------------- Pul pillələri ----------------
+const PRIZES = [100,200,300,500,1000,2000,4000,8000,16000,32000,64000,125000,250000,500000,1000000];
+const SAFE = [4, 9]; // 1000 ₼ və 32000 ₼ (indeks)
+
+// ---------------- Suallar ----------------
+// a: düz cavab həmişə birinci yazılır, oyunda qarışdırılır. lvl: 1 asan, 2 orta, 3 çətin
+const Q = [
+  // ---- Asan ----
+  {lvl:1,q:"İslamın müqəddəs kitabı hansıdır?",a:["Qurani-Kərim","Tövrat","İncil","Zəbur"],e:"Qurani-Kərim Allah tərəfindən Məhəmməd peyğəmbərə (s) nazil edilmiş son səmavi kitabdır."},
+  {lvl:1,q:"Gündə neçə vaxt namaz qılmaq vacibdir?",a:["5","3","4","7"],e:"Sübh, zöhr, əsr, şam və işa — gündəlik beş vacib namazdır."},
+  {lvl:1,q:"Hansı ayda oruc tutmaq vacibdir?",a:["Ramazan","Şəvval","Məhərrəm","Rəcəb"],e:"Ramazan ayında oruc tutmaq İslamın əsas əməllərindən biridir."},
+  {lvl:1,q:"Məhəmməd peyğəmbər (s) hansı şəhərdə dünyaya gəlib?",a:["Məkkə","Mədinə","Qüds","Taif"],e:"Peyğəmbərimiz (s) Fil ilində Məkkədə anadan olub."},
+  {lvl:1,q:"Qurani-Kərimin ilk surəsi hansıdır?",a:["Fatihə","Bəqərə","Nas","İxlas"],e:"Quran “Fatihə” (Açılış) surəsi ilə başlayır."},
+  {lvl:1,q:"Müsəlmanlar namaz qılarkən hansı tərəfə dönürlər?",a:["Kəbəyə","Məscidül-Əqsaya","Ərafata","Uhud dağına"],e:"Müsəlmanların qibləsi Məkkədəki Kəbədir."},
+  {lvl:1,q:"Qurani-Kərim hansı dildə nazil olub?",a:["Ərəb","Fars","Arami","İvrit"],e:"Quran ərəb dilində nazil olub."},
+  {lvl:1,q:"Vəhyi peyğəmbərlərə çatdıran mələk kimdir?",a:["Cəbrayıl","Mikayıl","İsrafil","Əzrayıl"],e:"Cəbrayıl (ə) vəhy mələyidir."},
+  {lvl:1,q:"Qurani-Kərimdə neçə surə var?",a:["114","110","112","120"],e:"Quranda 114 surə var."},
+  {lvl:1,q:"Qurani-Kərimin son surəsi hansıdır?",a:["Nas","Fələq","İxlas","Kövsər"],e:"Quran “Nas” surəsi ilə bitir."},
+  {lvl:1,q:"Ramazan ayı bitəndən sonra hansı bayram qeyd olunur?",a:["Ramazan (Fitr) bayramı","Qurban bayramı","Novruz bayramı","Mövlud"],e:"Ramazan orucu başa çatanda Fitr (Ramazan) bayramı qeyd olunur."},
+  {lvl:1,q:"Həcc ziyarəti hansı şəhərdə edilir?",a:["Məkkə","Mədinə","Qüds","Dəməşq"],e:"Həcc Məkkədə və onun ətrafındakı müqəddəs yerlərdə (Ərafat, Müzdəlifə, Mina) yerinə yetirilir."},
+
+  // ---- Orta ----
+  {lvl:2,q:"Peyğəmbər (s) Məkkədən hansı şəhərə hicrət etdi?",a:["Mədinə","Taif","Həbəşistan","Qüds"],e:"622-ci ildə Peyğəmbər (s) Mədinəyə hicrət etdi."},
+  {lvl:2,q:"Qurani-Kərimin ən uzun surəsi hansıdır?",a:["Bəqərə","Ali-İmran","Nisa","Yasin"],e:"Bəqərə surəsi 286 ayədən ibarətdir və ən uzun surədir."},
+  {lvl:2,q:"Qurani-Kərimin ən qısa surəsi hansıdır?",a:["Kövsər","İxlas","Nas","Əsr"],e:"Kövsər surəsi cəmi 3 ayədir."},
+  {lvl:2,q:"Oğlu İsmayıl (ə) ilə birlikdə Kəbəni ucaldan peyğəmbər kimdir?",a:["İbrahim (ə)","Nuh (ə)","Musa (ə)","Süleyman (ə)"],e:"Bəqərə surəsinin 127-ci ayəsində İbrahim və İsmayılın (ə) Kəbənin özülünü qaldırması xatırlanır."},
+  {lvl:2,q:"Gəmi düzəldib möminləri tufandan xilas edən peyğəmbər kimdir?",a:["Nuh (ə)","Hud (ə)","Saleh (ə)","Lut (ə)"],e:"Nuh (ə) Allahın əmri ilə gəmi düzəltdi."},
+  {lvl:2,q:"Balığın qarnında qalan peyğəmbər kimdir?",a:["Yunus (ə)","Yusif (ə)","Əyyub (ə)","İlyas (ə)"],e:"Yunus (ə) balığın qarnında Allaha dua edib xilas oldu."},
+  {lvl:2,q:"Musa peyğəmbərə (ə) nazil olan kitab hansıdır?",a:["Tövrat","Zəbur","İncil","Quran"],e:"Tövrat Musaya (ə) nazil olub."},
+  {lvl:2,q:"Davud peyğəmbərə (ə) nazil olan kitab hansıdır?",a:["Zəbur","Tövrat","İncil","Suhuf"],e:"Zəbur Davuda (ə) verilib."},
+  {lvl:2,q:"Qədr gecəsi hansı aydadır?",a:["Ramazan","Şaban","Rəcəb","Zilhiccə"],e:"Qədr surəsinə görə Quran Qədr gecəsində nazil olub, bu gecə Ramazan ayındadır."},
+  {lvl:2,q:"İlk vəhy hansı mağarada nazil olub?",a:["Hira","Sevr","Kəhf","Uhud"],e:"İlk vəhy Nur dağındakı Hira mağarasında gəlib. Sevr — hicrət zamanı gizlənilən mağaradır."},
+  {lvl:2,q:"İlk nazil olan ayələr hansı surədəndir?",a:["Ələq","Fatihə","Müddəssir","Bəqərə"],e:"“Oxu! Yaradan Rəbbinin adı ilə...” — Ələq surəsinin ilk ayələri."},
+  {lvl:2,q:"Peyğəmbərimizin (s) atasının adı nədir?",a:["Abdullah","Əbu Talib","Əbdülmüttəlib","Həmzə"],e:"Atası Abdullah, Peyğəmbər (s) doğulmamışdan əvvəl vəfat edib."},
+  {lvl:2,q:"Peyğəmbərimizin (s) anasının adı nədir?",a:["Aminə","Xədicə","Fatimə","Həlimə"],e:"Anası Aminə binti Vəhbdir. Həlimə — onun süd anasıdır."},
+  {lvl:2,q:"Peyğəmbərin (s) ilk həyat yoldaşı kim olub?",a:["Xədicə","Aişə","Ümmü Sələmə","Səudə"],e:"Xədicə (r) İslamı ilk qəbul edənlərdəndir."},
+  {lvl:2,q:"Hicri təqvim hansı hadisədən başlayır?",a:["Hicrətdən","Peyğəmbərin doğumundan","İlk vəhydən","Məkkənin fəthindən"],e:"Hicri təqvim Məkkədən Mədinəyə hicrətdən başlayır."},
+  {lvl:2,q:"Mağara əhli (Əshabi-Kəhf) haqqında hansı surədə danışılır?",a:["Kəhf","Yasin","Məryəm","Nur"],e:"Kəhf surəsində mağarada uzun müddət yatan gənclər xatırlanır."},
+  {lvl:2,q:"Ayətəl-Kürsi hansı surədədir?",a:["Bəqərə","Ali-İmran","Yasin","Mülk"],e:"Ayətəl-Kürsi Bəqərə surəsinin 255-ci ayəsidir."},
+  {lvl:2,q:"Qurani-Kərim neçə cüzə bölünür?",a:["30","20","40","114"],e:"Quran oxunuş rahatlığı üçün 30 cüzə bölünür."},
+  {lvl:2,q:"Peyğəmbər (s) hansı şəhərdə vəfat edib?",a:["Mədinə","Məkkə","Taif","Qüds"],e:"Peyğəmbər (s) hicrətin 11-ci ilində Mədinədə vəfat edib."},
+
+  // ---- Çətin ----
+  {lvl:3,q:"Qurani-Kərimdə adı açıq çəkilən yeganə qadın kimdir?",a:["Məryəm","Aminə","Xədicə","Asiyə"],e:"Məryəmin adı Quranda dəfələrlə çəkilir və bir surə də onun adını daşıyır."},
+  {lvl:3,q:"Qurani-Kərimdə adı ən çox çəkilən peyğəmbər kimdir?",a:["Musa (ə)","İbrahim (ə)","İsa (ə)","Nuh (ə)"],e:"Musanın (ə) adı Quranda 130-dan çox dəfə çəkilir."},
+  {lvl:3,q:"Hansı surə “Bismillah” ilə başlamır?",a:["Tövbə","Nəml","Kövsər","Kafirun"],e:"Tövbə (Bəraət) surəsi “Bismillah”sız başlayan yeganə surədir."},
+  {lvl:3,q:"Hansı surədə “Bismillah” iki dəfə keçir?",a:["Nəml","Tövbə","Fatihə","Yasin"],e:"Nəml surəsində həm əvvəldə, həm də Süleymanın (ə) məktubunda (30-cu ayə) keçir."},
+  {lvl:3,q:"Atası vəfat etdikdən sonra Peyğəmbəri (s) ilk himayə edən babası kim idi?",a:["Əbdülmüttəlib","Əbu Talib","Haşim","Abbas"],e:"Babası Əbdülmüttəlib vəfat edəndən sonra əmisi Əbu Talib onu himayə etdi."},
+  {lvl:3,q:"Peyğəmbər (s) hansı qəbilədən idi?",a:["Qureyş","Səqif","Xəzrəc","Həvazin"],e:"Peyğəmbər (s) Qureyş qəbiləsinin Haşimilər qolundandır."},
+  {lvl:3,q:"Qurani-Kərimdə neçə peyğəmbərin adı çəkilir?",a:["25","12","40","124"],e:"Quranda 25 peyğəmbərin adı açıq şəkildə çəkilir."},
+  {lvl:3,q:"Hicri təqvimin ilk ayı hansıdır?",a:["Məhərrəm","Səfər","Ramazan","Rəbiüləvvəl"],e:"Hicri ilin ilk ayı Məhərrəmdir."},
+  {lvl:3,q:"Ramazan hicri təqvimin neçənci ayıdır?",a:["9","7","10","12"],e:"Ramazan hicri təqvimin 9-cu ayıdır."},
+  {lvl:3,q:"Həcc ibadəti hansı ayda yerinə yetirilir?",a:["Zilhiccə","Zilqədə","Şəvval","Məhərrəm"],e:"Həcc mərasimləri Zilhiccə ayının 8–13-ü arasında olur."},
+  {lvl:3,q:"Ərafat günü Zilhiccə ayının neçəsinə düşür?",a:["9-na","10-na","1-nə","15-nə"],e:"Ərafat günü Zilhiccənin 9-u, Qurban bayramı isə 10-udur."},
+  {lvl:3,q:"Hicrət zamanı Mədinə yaxınlığında tikilən ilk məscid hansıdır?",a:["Quba məscidi","Məscidün-Nəbəvi","Qiblətəyn məscidi","Məscidül-Haram"],e:"Quba məscidi İslam tarixində tikilən ilk məsciddir."},
+  {lvl:3,q:"İsra və Merac hadisəsi ilə başlayan surə hansıdır?",a:["İsra","Nəcm","Kəhf","Furqan"],e:"İsra surəsinin ilk ayəsi Peyğəmbərin (s) gecə səyahətindən bəhs edir."},
+  {lvl:3,q:"Bədr döyüşü hicrətin neçənci ilində baş verib?",a:["2-ci","1-ci","3-cü","5-ci"],e:"Bədr döyüşü hicrətin 2-ci ilində, Ramazan ayında olub."},
+  {lvl:3,q:"Pul üçün illik zəkat miqdarı nə qədərdir?",a:["2,5%","10%","5%","20%"],e:"Nisab həddinə çatan və üzərindən bir il keçən puldan 1/40, yəni 2,5% zəkat verilir."},
+  {lvl:2,q:"Fatihə surəsi neçə ayədən ibarətdir?",a:["7","5","9","10"],e:"Fatihə surəsi 7 ayədən ibarətdir və “Səb'ül-Məsani” (təkrarlanan yeddi) adlanır."},
+];
+
+// ---------------- Vəziyyət ----------------
+const $ = id => document.getElementById(id);
+let deck, level, bank, cur, locked, timerId, timeLeft, timeMax, used, soundOn = true;
+
+function fmt(n){ return n.toLocaleString('az-AZ').replace(/,/g,' ') + ' ₼'; }
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function lvlFor(i){ return i<5?1:i<10?2:3; }
+function safeAmount(){ let s=0; SAFE.forEach(i=>{ if(level>i) s=PRIZES[i]; }); return s; }
+
+function store(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v);}catch(e){return null;} }
+function showBest(){ const b=+store('nur-best')||0; $('bestTxt').textContent = b? 'Ən yaxşı nəticən: '+fmt(b) : ''; }
+
+// ---------------- Səs (WebAudio) ----------------
+let ac;
+function tone(freqs, dur=0.15, type='sine', gap=0.12){
+  if(!soundOn) return;
+  try{
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    freqs.forEach((f,i)=>{
+      const o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime+i*gap;
+      o.type=type; o.frequency.value=f; o.connect(g); g.connect(ac.destination);
+      g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.18,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      o.start(t); o.stop(t+dur+.02);
+    });
+  }catch(e){}
+}
+const sfx = {
+  ok:()=>tone([523,659,784,1047],.22,'triangle',.1),
+  bad:()=>tone([300,220,160],.35,'sawtooth',.18),
+  tick:()=>tone([880],.05,'square'),
+  sel:()=>tone([440],.12,'triangle'),
+  win:()=>tone([523,659,784,1047,784,1047,1319],.3,'triangle',.14)
+};
+$('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').textContent=soundOn?'🔊':'🔇'; };
+
+// ---------------- Pillələr ----------------
+function buildLadder(){
+  $('ladder').innerHTML = PRIZES.map((p,i)=>
+    `<div class="step${SAFE.includes(i)?' safe':''}" id="s${i}"><span class="n">${i+1}</span><span class="m">${fmt(p)}</span></div>`).join('');
+}
+function paintLadder(lostAt){
+  PRIZES.forEach((_,i)=>{
+    const el=$('s'+i); el.classList.remove('cur','done','lost');
+    if(i<level) el.classList.add('done');
+    if(i===level) el.classList.add(lostAt?'lost':'cur');
+  });
+}
+
+// ---------------- Oyun ----------------
+function start(){
+  // Hər çətinlik üçün sualları qarışdır
+  deck = {1:shuffle(Q.filter(q=>q.lvl===1)),2:shuffle(Q.filter(q=>q.lvl===2)),3:shuffle(Q.filter(q=>q.lvl===3))};
+  level=0; bank=0; used={f:false,a:false,s:false};
+  ['l50','lAud','lSwap'].forEach(id=>$(id).disabled=false);
+  buildLadder(); show('game'); next();
+}
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id)); window.scrollTo(0,0); }
+
+function next(){
+  const lv=lvlFor(level);
+  const raw = deck[lv].pop();
+  cur = {...raw, opts: shuffle(raw.a), right: raw.a[0]};
+  locked=false;
+  $('qNum').textContent = `Sual ${level+1} / 15 · ${fmt(PRIZES[level])} uğrunda`;
+  $('qTxt').textContent = cur.q;
+  $('answers').innerHTML = cur.opts.map((o,i)=>
+    `<button class="ans" data-v="${encodeURIComponent(o)}"><span class="l">${'ABCD'[i]}:</span><span>${o}</span></button>`).join('');
+  document.querySelectorAll('.ans').forEach(b=>b.onclick=()=>pick(b));
+  $('info').className='info'; $('info').innerHTML='';
+  $('nextBtn').classList.remove('on');
+  $('quitBtn').disabled=false;
+  $('bankTxt').textContent=fmt(bank);
+  paintLadder();
+  startTimer(lv===3?45:30);
+}
+
+function startTimer(sec){
+  clearInterval(timerId); timeMax=timeLeft=sec; drawTimer();
+  timerId=setInterval(()=>{
+    timeLeft--; drawTimer();
+    if(timeLeft<=5 && timeLeft>0) sfx.tick();
+    if(timeLeft<=0){ clearInterval(timerId); timeUp(); }
+  },1000);
+}
+function drawTimer(){
+  $('tTxt').textContent=timeLeft;
+  $('tArc').style.strokeDashoffset = 175.9*(1-timeLeft/timeMax);
+  $('timer').classList.toggle('low',timeLeft<=5);
+}
+
+function pick(btn){
+  if(locked) return; locked=true; clearInterval(timerId);
+  $('quitBtn').disabled=true;
+  document.querySelectorAll('.ans').forEach(b=>b.disabled=true);
+  btn.classList.add('sel'); sfx.sel();
+  setTimeout(()=>reveal(decodeURIComponent(btn.dataset.v)===cur.right, btn), 1400);
+}
+function timeUp(){
+  if(locked) return; locked=true;
+  document.querySelectorAll('.ans').forEach(b=>b.disabled=true);
+  reveal(false,null,true);
+}
+function rightBtn(){ return [...document.querySelectorAll('.ans')].find(b=>decodeURIComponent(b.dataset.v)===cur.right); }
+
+function flash(c){ const f=$('flash'); f.className='flash '+c; setTimeout(()=>f.className='flash',500); }
+
+function reveal(ok, btn, timeout){
+  const rb=rightBtn();
+  if(btn) btn.classList.remove('sel');
+  rb.classList.add('ok');
+  if(ok){
+    sfx.ok(); flash('g');
+    bank=PRIZES[level]; level++;
+    $('bankTxt').textContent=fmt(bank);
+    paintLadder();
+    if(level===15){ setTimeout(()=>finish('win'),1600); return; }
+    const safeMsg = SAFE.includes(level-1) ? `<br>◆ Təbriklər! ${fmt(bank)} artıq zəmanətlidir.` : '';
+    $('info').innerHTML=`<div class="t good">✔ Düzdür! +${fmt(PRIZES[level-1])}</div>${cur.e}${safeMsg}`;
+    $('info').className='info on';
+    $('nextBtn').classList.add('on');
+    $('quitBtn').disabled=false;
+  }else{
+    sfx.bad(); flash('r');
+    if(btn) btn.classList.add('bad');
+    paintLadder(true);
+    const keep=safeAmount(), lost=bank-keep;
+    $('info').innerHTML=`<div class="t wrong">✖ ${timeout?'Vaxt bitdi!':'Səhv cavab!'} Düz cavab: ${cur.right}</div>${cur.e}`+
+      (lost>0?`<br><b>${fmt(lost)}</b> itirdin.`:'');
+    $('info').className='info on';
+    bank=keep;
+    $('bankTxt').textContent=fmt(bank);
+    setTimeout(()=>finish('lose'),3800);
+  }
+}
+
+function finish(kind){
+  clearInterval(timerId);
+  const best=+store('nur-best')||0; if(bank>best) store('nur-best',bank);
+  const map={
+    win:['🏆','Möhtəşəm!','Bütün 15 suala düz cavab verdin. Maşallah!'],
+    lose:['📖','Oyun bitdi',bank?'Zəmanətli məbləğ səndə qaldı. Yenə cəhd et!':'Bu dəfə alınmadı, amma hər sual yeni bilikdir!'],
+    quit:['💰','Pulu götürdün','Ağıllı qərar! Qazandığın məbləğ:']
+  }[kind];
+  $('endIcon').textContent=map[0]; $('endTitle').textContent=map[1]; $('endSub').textContent=map[2];
+  $('endPrize').textContent=fmt(bank);
+  if(kind!=='lose') sfx.win();
+  show('end'); showBest();
+}
+
+// ---------------- Köməkçilər ----------------
+$('l50').onclick=()=>{
+  if(locked||used.f) return; used.f=true; $('l50').disabled=true;
+  const wrong=shuffle([...document.querySelectorAll('.ans')].filter(b=>decodeURIComponent(b.dataset.v)!==cur.right)).slice(0,2);
+  wrong.forEach(b=>{b.classList.add('hide');b.disabled=true;});
+};
+$('lAud').onclick=()=>{
+  if(locked||used.a) return; used.a=true; $('lAud').disabled=true;
+  const btns=[...document.querySelectorAll('.ans')], vis=btns.filter(b=>!b.classList.contains('hide'));
+  const lv=lvlFor(level);
+  // Zal asan suallarda daha çox, çətin suallarda daha az haqlıdır
+  const accurate = Math.random() < (lv===1?.95:lv===2?.8:.6);
+  const favIdx = accurate ? vis.indexOf(rightBtn()) : Math.floor(Math.random()*vis.length);
+  let w = vis.map((_,i)=> i===favIdx ? 40+Math.random()*30 : Math.random()*25);
+  const sum=w.reduce((a,b)=>a+b,0); w=w.map(x=>Math.round(x/sum*100));
+  const pct={}; vis.forEach((b,i)=>pct[btns.indexOf(b)]=w[i]);
+  $('info').innerHTML='<div class="t">📊 Zalın səsi</div><div class="poll">'+
+    btns.map((b,i)=>`<div><span>${pct[i]??0}%</span><i style="height:0"></i><b>${'ABCD'[i]}</b></div>`).join('')+'</div>';
+  $('info').className='info on';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    $('info').querySelectorAll('.poll i').forEach((el,i)=>el.style.height=((pct[i]??0)*0.75)+'px');
+  }));
+};
+$('lSwap').onclick=()=>{
+  if(locked||used.s) return; used.s=true; $('lSwap').disabled=true;
+  clearInterval(timerId); next();
+};
+
+$('quitBtn').onclick=()=>{
+  if(locked && !$('nextBtn').classList.contains('on')) return;
+  if(!confirm(`${fmt(bank)} ilə oyunu bitirmək istəyirsən?`)) return;
+  finish('quit');
+};
+$('nextBtn').onclick=next;
+$('startBtn').onclick=start;
+$('againBtn').onclick=start;
+showBest();
+</script>
+</body>
+</html>
