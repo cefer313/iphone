@@ -17,6 +17,7 @@
     document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
     document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
     renderQuote();
+    renderChallenge();
     const status = document.getElementById('formStatus');
     status.textContent = ''; status.className = 'form__status';
     try { localStorage.setItem('lang', lang); } catch (e) { /* ignore */ }
@@ -80,7 +81,7 @@
   });
 
   // Reveal on scroll
-  const revealEls = document.querySelectorAll('.section__head, .card, .article, .review, .about > *, .contact > *');
+  const revealEls = document.querySelectorAll('.section__head, .card, .format, .events, .challenge, .article, .review, .about > *, .contact > *');
   revealEls.forEach(el => el.classList.add('reveal'));
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => entries.forEach(en => {
@@ -90,6 +91,40 @@
   } else {
     revealEls.forEach(el => el.classList.add('visible'));
   }
+
+  // Birgə: 21 günlük çağırış (irəliləyiş bu cihazda saxlanılır)
+  const DAYS = 21;
+  const daysEl = document.getElementById('challengeDays');
+  let done = [];
+  try { done = JSON.parse(localStorage.getItem('birge.challenge') || '[]').filter(n => n >= 1 && n <= DAYS); } catch (e) { done = []; }
+  function saveChallenge() { try { localStorage.setItem('birge.challenge', JSON.stringify(done)); } catch (e) { /* ignore */ } }
+  for (let i = 1; i <= DAYS; i++) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'day'; b.textContent = i; b.dataset.day = i;
+    b.addEventListener('click', () => {
+      done = done.includes(i) ? done.filter(n => n !== i) : done.concat(i);
+      saveChallenge(); renderChallenge();
+    });
+    daysEl.appendChild(b);
+  }
+  function renderChallenge() {
+    if (!daysEl) return;
+    daysEl.querySelectorAll('.day').forEach(b => {
+      const on = done.includes(+b.dataset.day);
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on);
+      b.setAttribute('aria-label', t('birge.ch.day') + ' ' + b.dataset.day);
+    });
+    document.getElementById('challengeBar').style.width = (done.length / DAYS * 100) + '%';
+    document.getElementById('challengeStatus').textContent =
+      done.length === DAYS ? t('birge.ch.done') : t('birge.ch.status').replace('{n}', done.length);
+  }
+  document.getElementById('challengeReset').addEventListener('click', () => { done = []; saveChallenge(); renderChallenge(); });
+
+  // Tədbirə "Qoşul" — formda Birgə seçilsin
+  document.querySelectorAll('[data-program]').forEach(a => a.addEventListener('click', () => {
+    form.elements.program.value = a.dataset.program;
+  }));
 
   document.getElementById('year').textContent = new Date().getFullYear();
   applyLang(lang);

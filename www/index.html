@@ -25,6 +25,7 @@
       <nav class="nav" id="nav">
         <a href="#about" data-i18n="nav.about"></a>
         <a href="#programs" data-i18n="nav.programs"></a>
+        <a href="#birge" data-i18n="nav.birge"></a>
         <a href="#articles" data-i18n="nav.articles"></a>
         <a href="#reviews" data-i18n="nav.reviews"></a>
         <a href="#contact" data-i18n="nav.contact"></a>
@@ -130,6 +131,73 @@
       </div>
     </section>
 
+    <!-- BIRGƏ (İCMA) -->
+    <section class="section birge" id="birge">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow" data-i18n="birge.eyebrow"></p>
+          <h2 data-i18n="birge.title"></h2>
+          <p class="birge__lead" data-i18n="birge.lead"></p>
+        </div>
+
+        <div class="formats">
+          <article class="format">
+            <div class="format__icon">🤝</div>
+            <h3 data-i18n="birge.f1.title"></h3>
+            <p data-i18n="birge.f1.text"></p>
+            <span class="format__meta" data-i18n="birge.f1.meta"></span>
+          </article>
+          <article class="format">
+            <div class="format__icon">🔥</div>
+            <h3 data-i18n="birge.f2.title"></h3>
+            <p data-i18n="birge.f2.text"></p>
+            <span class="format__meta" data-i18n="birge.f2.meta"></span>
+          </article>
+          <article class="format">
+            <div class="format__icon">💬</div>
+            <h3 data-i18n="birge.f3.title"></h3>
+            <p data-i18n="birge.f3.text"></p>
+            <span class="format__meta" data-i18n="birge.f3.meta"></span>
+          </article>
+        </div>
+
+        <div class="birge__grid">
+          <div class="events">
+            <h3 data-i18n="birge.events.title"></h3>
+            <ul class="events__list">
+              <li class="event">
+                <div class="event__date"><strong>21</strong><span data-i18n="month.nov"></span></div>
+                <div class="event__info"><h4 data-i18n="birge.e1.title"></h4><p data-i18n="birge.e1.meta"></p></div>
+                <a href="#contact" class="btn btn--small event__btn" data-program="birge" data-i18n="birge.join"></a>
+              </li>
+              <li class="event">
+                <div class="event__date"><strong>28</strong><span data-i18n="month.nov"></span></div>
+                <div class="event__info"><h4 data-i18n="birge.e2.title"></h4><p data-i18n="birge.e2.meta"></p></div>
+                <a href="#contact" class="btn btn--small event__btn" data-program="birge" data-i18n="birge.join"></a>
+              </li>
+              <li class="event">
+                <div class="event__date"><strong>05</strong><span data-i18n="month.dec"></span></div>
+                <div class="event__info"><h4 data-i18n="birge.e3.title"></h4><p data-i18n="birge.e3.meta"></p></div>
+                <a href="#contact" class="btn btn--small event__btn" data-program="birge" data-i18n="birge.join"></a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="challenge">
+            <p class="eyebrow" data-i18n="birge.ch.eyebrow"></p>
+            <h3 data-i18n="birge.ch.title"></h3>
+            <p class="challenge__text" data-i18n="birge.ch.text"></p>
+            <div class="challenge__days" id="challengeDays" role="group"></div>
+            <div class="challenge__bar"><span id="challengeBar"></span></div>
+            <div class="challenge__foot">
+              <p id="challengeStatus" role="status"></p>
+              <button class="challenge__reset" id="challengeReset" type="button" data-i18n="birge.ch.reset"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ARTICLES -->
     <section class="section" id="articles">
       <div class="container">
@@ -201,6 +269,7 @@
               <option data-i18n="programs.p1.title"></option>
               <option data-i18n="programs.p2.title"></option>
               <option data-i18n="programs.p3.title"></option>
+              <option value="birge" data-i18n="birge.option"></option>
             </select>
           </label>
           <label><span data-i18n="form.message"></span><textarea name="message" rows="4"></textarea></label>
