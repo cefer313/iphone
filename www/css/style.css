@@ -83,6 +83,13 @@ p + p { margin-top: .8rem; }
   padding: .35rem .65rem; border-radius: 999px; cursor: pointer; color: var(--muted);
 }
 .lang button.active { background: var(--text); color: var(--bg); }
+.fiqh-btn {
+  display: inline-flex; align-items: center; gap: .35rem; padding: .45rem 1rem; border-radius: 999px;
+  background: var(--deep); color: #fff; font-weight: 800; font-size: .85rem; letter-spacing: .02em;
+  white-space: nowrap; transition: background .2s, transform .2s;
+}
+.fiqh-btn::before { content: '📖'; font-size: .9rem; }
+.fiqh-btn:hover { background: var(--accent); transform: translateY(-1px); }
 .burger { display: none; background: none; border: 0; cursor: pointer; padding: 6px; }
 .burger span { display: block; width: 22px; height: 2px; background: var(--text); margin: 5px 0; transition: .3s; }
 
@@ -309,7 +316,10 @@ p + p { margin-top: .8rem; }
 }
 @media (max-width: 420px) {
   .logo { font-size: 1.1rem; }
-  .lang button { padding: .3rem .5rem; }
+  .lang button { padding: .3rem .45rem; }
+  .header__right { gap: .45rem; }
+  .fiqh-btn { padding: .4rem .7rem; font-size: .8rem; }
+  .fiqh-btn::before { display: none; }
   .quote-card { position: static; margin-top: 1.5rem; max-width: none; }
   .event { grid-template-columns: auto 1fr; }
   .event__btn { grid-column: 1 / -1; width: 100%; }
