@@ -28,6 +28,13 @@ jobs:
             -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/App.xcarchive" \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+      - name: Check web content is inside the app
+        run: |
+          APP="$RUNNER_TEMP/App.xcarchive/Products/Applications/App.app"
+          for f in public/index.html public/serieet/index.html public/serieet/data/index.json public/serieet/data/ch49.json; do
+            test -f "$APP/$f" || { echo "Tətbiqdə yoxdur: $f"; exit 1; }
+          done
+          du -sh "$APP" "$APP/public"
       - name: Package IPA
         run: |
           mkdir -p "$RUNNER_TEMP/ipa/Payload"
