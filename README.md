@@ -26,3 +26,17 @@ App Store üçün Apple Developer hesabı ($99/il) lazımdır.
 ## PWA (quraşdırılan veb-tətbiq)
 Sayt internetdə yayımlananda telefonda "Ana ekrana əlavə et" ilə tətbiq kimi quraşdırılır,
 offline da işləyir. GitHub Pages: Settings → Pages → Source: **GitHub Actions** (main branch-dan yayımlanır).
+
+## Şəriət məsələləri (kitab bölməsi)
+`www/serieet/` — Ayətullah əl-üzma Seyid Əli Sistani cənablarının fətvaları, «Geniş izahlı şəriət məsələləri», I cild
+(tərcümə: Bəxtiyar Hüseynov; nəşr: «Zərdabi LTD» MMC, Bakı, 2018). Nəşriyyatın icazəsi ilə, nəşriyyatın adı qeyd
+edilmək şərti ilə dərc olunur — `serieet/` səhifəsində və ana səhifədəki kitab bölməsində bu qeyd silinməməlidir.
+
+Mətn PDF-dən avtomatik çıxarılır (dəyişiklik edilmədən):
+```
+pip install pymupdf
+python3 tools/toc.py azari-book-25262.pdf tools/toc.json
+python3 tools/extract.py azari-book-25262.pdf www/serieet/data
+python3 tools/verify.py azari-book-25262.pdf www/serieet/data   # PDF ilə simvol-simvol müqayisə
+```
+Qeyd: kitabın öz nömrələməsində 53, 162, 247 iki dəfə gəlir; 54, 161, 248, 1020, 2039, 2362 yoxdur — olduğu kimi saxlanılıb.

@@ -1,6 +1,7 @@
 // Offline dəstəyi: əsas faylları keşdə saxlayır
-const CACHE = 'baxis-v2';
+const CACHE = 'baxis-v3';
 const ASSETS = ['./', './index.html', './css/style.css', './js/i18n.js', './js/main.js',
+  './serieet/', './serieet/index.html', './serieet/serieet.css', './serieet/serieet.js', './serieet/data/index.json',
   './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
