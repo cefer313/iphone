@@ -137,11 +137,12 @@ class Man:
         self.sole = {s: box('sole' + s, 0.1, 0.27, 0.018, self.sandal_m, bevel=0.006) for s in 'LR'}
         self.strap = {s: capsule('strap' + s, 0.009, 0.009, 0.1, self.sandal_m, segs=10) for s in 'LR'}
         self.strap2 = {s: capsule('strapb' + s, 0.008, 0.008, 0.09, self.sandal_m, segs=10) for s in 'LR'}
-        self.neckm = capsule('neck', 0.055, 0.05, DIM['neck'], sk)
+        self.neckm = capsule('neck', 0.068, 0.06, DIM['neck'], None)
         self.headm = ellipsoid('head', 0.098, 0.108, 0.118, sk)
         self.cap = ellipsoid('cap', 0.108, 0.118, 0.1, self.head_m, segs=40, rings=20)
         self.wrap1 = ellipsoid('wrap1', 0.124, 0.132, 0.05, self.head_m, segs=40, rings=12)
         self.wrap2 = ellipsoid('wrap2', 0.116, 0.125, 0.03, self.head_m, segs=40, rings=12)
+        self.neckm.data.materials.append(self.head_m)
         self.tail = Tube('headtail', 6, 12, self.head_m, closed=False)
         self.hand = {'L': Hand('handL', sk), 'R': Hand('handR', sk)}
         self.robe = Tube('robe', 13, 28, self.robe_m)

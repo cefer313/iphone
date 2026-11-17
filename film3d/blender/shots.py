@@ -324,11 +324,11 @@ def camera(f):
         return loc, tgt, 30, 4.0
     if s == 'D2':
         k = (f - 390) / 90
-        loc = V((0.85, -1.35, 0.78)) + V((-0.05, 0.12, 0)) * k
-        tgt = V((0.2, 0.45, 0.98))
-        return loc, tgt, 42, 2.8
+        loc = V((0.16, -1.75, 0.8)) + V((0.02, 0.12, 0)) * k
+        tgt = V((0.26, 0.4, 0.74))
+        return loc, tgt, 30, 4.0
     # E: prayer
     k = (f - 480) / 120
-    loc = V((1.25, 8.45, 1.55)) + V((0.0, 0.25, 0)) * smoother(k)
-    tgt = V((1.85, 11.0, 1.15))
-    return loc, tgt, 38, 4.0
+    loc = V((1.95, 6.9, 1.6)) + V((0.0, 0.35, 0)) * smoother(k)
+    tgt = V((1.8, 11.0, 1.05))
+    return loc, tgt, 26, 5.6

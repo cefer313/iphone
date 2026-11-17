@@ -158,7 +158,7 @@ def apply_frame(f):
         fill.location = loc + V((0.4, -0.3, 0.7))
         fill.data.energy = 5
         fill.rotation_euler = (tgt - fill.location).to_track_quat('-Z', 'Y').to_euler()
-    scene.view_settings.exposure = {'A': 1.6, 'B': 1.6, 'C1': 1.5, 'C2': 1.6, 'D1': 0.5, 'D2': 0.9, 'E': 1.7}[s]
+    scene.view_settings.exposure = {'A': 1.6, 'B': 1.6, 'C1': 1.5, 'C2': 1.6, 'D1': 1.1, 'D2': 0.9, 'E': 1.7}[s]
 
 
 os.makedirs(args.out, exist_ok=True)
