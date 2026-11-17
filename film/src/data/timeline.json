@@ -1,0 +1,425 @@
+{
+ "fps": 30,
+ "frames": 900,
+ "gait": {
+  "step": 20,
+  "swing": 15,
+  "stepLen": 0.52,
+  "halfW": 0.105
+ },
+ "shots": {
+  "s1": {
+   "from": 0,
+   "dur": 120
+  },
+  "s2": {
+   "from": 120,
+   "dur": 120
+  },
+  "s3": {
+   "from": 240,
+   "dur": 150
+  },
+  "s4": {
+   "from": 390,
+   "dur": 210
+  },
+  "s5": {
+   "from": 600,
+   "dur": 150
+  },
+  "s6": {
+   "from": 750,
+   "dur": 150
+  }
+ },
+ "steps": {
+  "s1": [
+   {
+    "foot": "L",
+    "lift": -69,
+    "land": -54,
+    "x": -0.105,
+    "z": 0.65
+   },
+   {
+    "foot": "R",
+    "lift": -49,
+    "land": -34,
+    "x": 0.105,
+    "z": 1.17
+   },
+   {
+    "foot": "L",
+    "lift": -29,
+    "land": -14,
+    "x": -0.105,
+    "z": 1.69
+   },
+   {
+    "foot": "R",
+    "lift": -9,
+    "land": 6,
+    "x": 0.105,
+    "z": 2.21
+   },
+   {
+    "foot": "L",
+    "lift": 11,
+    "land": 26,
+    "x": -0.105,
+    "z": 2.73
+   },
+   {
+    "foot": "R",
+    "lift": 31,
+    "land": 46,
+    "x": 0.105,
+    "z": 3.25
+   },
+   {
+    "foot": "L",
+    "lift": 51,
+    "land": 66,
+    "x": -0.105,
+    "z": 3.77
+   },
+   {
+    "foot": "R",
+    "lift": 71,
+    "land": 86,
+    "x": 0.105,
+    "z": 4.29
+   },
+   {
+    "foot": "L",
+    "lift": 91,
+    "land": 106,
+    "x": -0.105,
+    "z": 4.81
+   },
+   {
+    "foot": "R",
+    "lift": 111,
+    "land": 126,
+    "x": 0.105,
+    "z": 5.33
+   },
+   {
+    "foot": "L",
+    "lift": 131,
+    "land": 146,
+    "x": -0.105,
+    "z": 5.85
+   }
+  ],
+  "s3": [
+   {
+    "foot": "L",
+    "lift": -16,
+    "land": -1,
+    "x": -0.055,
+    "z": 1.06,
+    "fromZ": 0.04
+   },
+   {
+    "foot": "R",
+    "lift": 4,
+    "land": 21,
+    "x": 0.155,
+    "z": 1.4,
+    "fromZ": 0.54
+   },
+   {
+    "foot": "L",
+    "lift": 28,
+    "land": 46,
+    "x": -0.055,
+    "z": 1.42
+   }
+  ],
+  "s6": [
+   {
+    "foot": "R",
+    "lift": -27,
+    "land": -12,
+    "x": 0.355,
+    "z": 1.25
+   },
+   {
+    "foot": "L",
+    "lift": -7,
+    "land": 8,
+    "x": 0.14500000000000002,
+    "z": 1.77
+   },
+   {
+    "foot": "R",
+    "lift": 13,
+    "land": 28,
+    "x": 0.355,
+    "z": 2.29
+   },
+   {
+    "foot": "L",
+    "lift": 33,
+    "land": 48,
+    "x": 0.14500000000000002,
+    "z": 2.81
+   },
+   {
+    "foot": "R",
+    "lift": 53,
+    "land": 68,
+    "x": 0.355,
+    "z": 3.33
+   },
+   {
+    "foot": "L",
+    "lift": 73,
+    "land": 88,
+    "x": 0.14500000000000002,
+    "z": 3.85
+   },
+   {
+    "foot": "R",
+    "lift": 93,
+    "land": 108,
+    "x": 0.355,
+    "z": 4.37
+   },
+   {
+    "foot": "L",
+    "lift": 113,
+    "land": 128,
+    "x": 0.14500000000000002,
+    "z": 4.89
+   },
+   {
+    "foot": "R",
+    "lift": 133,
+    "land": 148,
+    "x": 0.355,
+    "z": 5.41
+   },
+   {
+    "foot": "L",
+    "lift": 153,
+    "land": 168,
+    "x": 0.14500000000000002,
+    "z": 5.93
+   }
+  ]
+ },
+ "s3": {
+  "raiseStart": 52,
+  "knock1": 72,
+  "knock2": 86,
+  "lowerStart": 94,
+  "lowerEnd": 118,
+  "doorStart": 122,
+  "doorEnd": 149
+ },
+ "s4": {
+  "kneelStart": 6,
+  "kneelEnd": 74,
+  "lowerStart": 52,
+  "contact": 104,
+  "release": 116,
+  "openStart": 128,
+  "openEnd": 166,
+  "childStepStart": 160,
+  "childStepEnd": 186,
+  "softenStart": 168,
+  "softenEnd": 206
+ },
+ "s5": {
+  "reachStart": 26,
+  "touch": 58,
+  "bothEnd": 80,
+  "releaseEnd": 92,
+  "withdrawEnd": 116,
+  "drawEnd": 118
+ },
+ "s2": {
+  "tightenStart": 18,
+  "tightenEnd": 42,
+  "liftStart": 44,
+  "liftPeak": 62,
+  "settleEnd": 100
+ },
+ "title": {
+  "in": 795,
+  "full": 826,
+  "fadeOutStart": 888
+ },
+ "cues": [
+  {
+   "type": "step",
+   "frame": 6,
+   "shot": "s1",
+   "z": 2.21
+  },
+  {
+   "type": "step",
+   "frame": 26,
+   "shot": "s1",
+   "z": 2.73
+  },
+  {
+   "type": "step",
+   "frame": 46,
+   "shot": "s1",
+   "z": 3.25
+  },
+  {
+   "type": "step",
+   "frame": 66,
+   "shot": "s1",
+   "z": 3.77
+  },
+  {
+   "type": "step",
+   "frame": 86,
+   "shot": "s1",
+   "z": 4.29
+  },
+  {
+   "type": "step",
+   "frame": 106,
+   "shot": "s1",
+   "z": 4.81
+  },
+  {
+   "type": "cloth",
+   "frame": 160,
+   "end": 196,
+   "gain": 0.8
+  },
+  {
+   "type": "step",
+   "frame": 261,
+   "shot": "s3",
+   "z": 1.4
+  },
+  {
+   "type": "step",
+   "frame": 286,
+   "shot": "s3",
+   "z": 1.42
+  },
+  {
+   "type": "cloth",
+   "frame": 290,
+   "end": 316,
+   "gain": 0.5
+  },
+  {
+   "type": "knock",
+   "frame": 312
+  },
+  {
+   "type": "knock",
+   "frame": 326
+  },
+  {
+   "type": "cloth",
+   "frame": 334,
+   "end": 358,
+   "gain": 0.4
+  },
+  {
+   "type": "creak",
+   "frame": 362,
+   "len": 30
+  },
+  {
+   "type": "cloth",
+   "frame": 396,
+   "end": 466,
+   "gain": 0.7
+  },
+  {
+   "type": "cloth",
+   "frame": 442,
+   "end": 500,
+   "gain": 0.6
+  },
+  {
+   "type": "sack",
+   "frame": 494
+  },
+  {
+   "type": "cloth",
+   "frame": 518,
+   "end": 558,
+   "gain": 0.55
+  },
+  {
+   "type": "cloth",
+   "frame": 600,
+   "end": 626,
+   "gain": 0.45
+  },
+  {
+   "type": "cloth",
+   "frame": 676,
+   "end": 706,
+   "gain": 0.4
+  },
+  {
+   "type": "cloth",
+   "frame": 742,
+   "end": 760,
+   "gain": 0.35
+  },
+  {
+   "type": "step",
+   "frame": 758,
+   "shot": "s6",
+   "z": 1.77
+  },
+  {
+   "type": "step",
+   "frame": 778,
+   "shot": "s6",
+   "z": 2.29
+  },
+  {
+   "type": "step",
+   "frame": 798,
+   "shot": "s6",
+   "z": 2.81
+  },
+  {
+   "type": "step",
+   "frame": 818,
+   "shot": "s6",
+   "z": 3.33
+  },
+  {
+   "type": "step",
+   "frame": 838,
+   "shot": "s6",
+   "z": 3.85
+  },
+  {
+   "type": "step",
+   "frame": 858,
+   "shot": "s6",
+   "z": 4.37
+  },
+  {
+   "type": "step",
+   "frame": 878,
+   "shot": "s6",
+   "z": 4.89
+  },
+  {
+   "type": "step",
+   "frame": 898,
+   "shot": "s6",
+   "z": 5.41
+  }
+ ]
+}
