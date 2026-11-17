@@ -1,0 +1,23 @@
+{
+  "fps": 30,
+  "frames": 600,
+  "shots": [
+    {"name": "1 The arrival", "clip": "s1.mp4", "from": 0, "dur": 120, "clipStart": 9},
+    {"name": "2 The gift", "clip": "s2.mp4", "from": 120, "dur": 120, "clipStart": 24},
+    {"name": "3a The knock", "clip": "s3.mp4", "from": 240, "dur": 50, "clipStart": 6},
+    {"name": "3b The departure", "clip": "s4.mp4", "from": 290, "dur": 40, "clipStart": 50},
+    {"name": "4a The door opens (inside)", "clip": "s5.mp4", "from": 330, "dur": 60, "clipStart": 12},
+    {"name": "4b The unknown benefactor", "clip": "s6.mp4", "from": 390, "dur": 90, "clipStart": 45},
+    {"name": "5 The private prayer", "clip": "s7.mp4", "from": 480, "dur": 120, "clipStart": 30}
+  ],
+  "cues": {
+    "steps": [6, 22, 38, 54, 70, 86, 102, 292, 307, 322],
+    "stepGain": [0.12, 0.12, 0.13, 0.13, 0.14, 0.14, 0.15, 0.13, 0.1, 0.08],
+    "sack": 216,
+    "knocks": [245, 259],
+    "creak": [330, 350],
+    "cloth": [[122, 170, 0.9], [170, 214, 0.7], [292, 328, 0.5], [480, 520, 0.45]],
+    "prayer": 495,
+    "fadeOut": [582, 600]
+  }
+}

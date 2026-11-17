@@ -1,0 +1,11 @@
+{
+  "name": "unknown-benefactor-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "20-second AI-animated (Higgsfield / Kling 3.0) short assembled with Remotion",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts UnknownBenefactor out/raw.mp4 --codec=h264 --crf=16 --browser-executable=/opt/pw-browsers/chromium && npm run finalize",
+    "finalize": "ffmpeg -y -loglevel error -i out/raw.mp4 -c:v libx264 -preset slow -crf 16 -pix_fmt yuv420p -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 -c:a aac -b:a 192k -t 20 -movflags +faststart out/unknown-benefactor.mp4 && rm out/raw.mp4"
+  }
+}
