@@ -70,8 +70,14 @@ npm install
 npm run render
 ```
 
-The render script points Remotion at a local Chromium (`--browser-executable`).
-Remove that flag if you want Remotion to use its own browser download.
+`npm run render` renders the frames, then `npm run finalize` re-encodes the result to
+H.264 `yuv420p` (limited range, BT.709) and trims it to exactly 30.000 s. Remotion's JPEG
+frame cache otherwise produces full-range `yuvj420p`. The render script points Remotion
+at a local Chromium (`--browser-executable`); remove that flag to let Remotion download
+its own. `npm run qc` checks the frame count, format and audio levels, and makes motion strips.
+
+Verified output: 900 frames, 1080×1920, 30 fps, H.264 High, yuv420p, AAC 48 kHz
+stereo, 30.000 s; audio peak -6 dBFS; the final frame is black.
 
 Preview and edit in the studio:
 

@@ -1,3 +1,5 @@
 node_modules/
 out/*.png
+out/qc/
+out/raw.mp4
 .remotion/
