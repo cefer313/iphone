@@ -72,10 +72,33 @@ def footstep(seed):
     return out / np.abs(out).max()
 
 
+def load_wav(name):
+    with wave.open(os.path.join(ROOT, 'audio_src', name)) as w:
+        x = np.frombuffer(w.readframes(w.getnframes()), dtype='<i2').astype(float) / 32768
+        assert w.getframerate() == SR
+    return x
+
+
+def cut(x, t0, t1, fade_in=0.004, fade_out=0.06):
+    seg = x[int(t0 * SR):int(t1 * SR)].copy()
+    fi, fo = int(fade_in * SR), int(fade_out * SR)
+    seg[:fi] *= np.linspace(0, 1, fi)
+    seg[-fo:] *= np.linspace(1, 0, fo)
+    return seg
+
+
+# Real recorded-style sandal steps (Mirelo SFX): each step is cut out individually and
+# its transient is placed on the frame where the foot is planted in the picture.
+STEPS = load_wav('sfx_steps.wav')
+STEP_PEAKS = [0.42, 0.92, 1.62, 2.19, 2.83, 3.56, 4.08, 4.49, 5.2, 6.27, 6.78, 7.38]
+step_level = None
 cues = []
-for f, g in zip(EDL['steps'], EDL['stepGain']):
+for i, (f, g) in enumerate(zip(EDL['steps'], EDL['stepGain'])):
+    pk = STEP_PEAKS[(i * 5) % len(STEP_PEAKS)]
+    seg = cut(STEPS, pk - 0.05, pk + 0.34)
+    seg = seg / (np.sqrt(np.mean(seg ** 2)) + 1e-9)  # even out step-to-step level
+    add(seg, f2s(f) - int(0.05 * SR), 0.035 * g, 0.03)
     cues.append(('step', f))
-    add(footstep(100 + f), f2s(f) - int(0.004 * SR), g, 0.05)
 
 # cloth movement
 for a_, b_, g in EDL['cloth']:
@@ -96,31 +119,19 @@ s_ = th / np.abs(th).max() + rs / np.abs(rs).max() * 0.25
 add(s_, f2s(EDL['sack']) - int(0.01 * SR), 0.24, 0.1)
 cues.append(('sack', EDL['sack']))
 
-# two soft wooden knocks
-for f in EDL['knocks']:
-    n = int(0.3 * SR)
-    tt = np.arange(n) / SR
-    q = np.random.default_rng(f)
-    body = sum(a * np.sin(2 * np.pi * fr * tt + q.uniform(0, 6)) * np.exp(-tt / d)
-               for fr, a, d in ((168, 1.0, 0.07), (390, 0.6, 0.045), (735, 0.35, 0.03), (1250, 0.16, 0.018)))
-    click = band(q.standard_normal(n), 1800, 4500) * np.exp(-tt / 0.004) * 0.5
-    k = (body + click) * np.clip(tt / 0.0015, 0, 1)
-    add(k / np.abs(k).max(), f2s(f), 0.3, 0.1)
+# two real knuckle knocks on a thick wooden door, each on the frame the fist meets the door
+KNOCK = load_wav('sfx_knock.wav')
+for f, (t0, pk, t1) in zip(EDL['knocks'], ((2.47, 2.50, 2.64), (2.645, 2.67, 2.95))):
+    seg = cut(KNOCK, t0, t1, 0.002, 0.03)
+    seg = seg / (np.abs(seg).max() + 1e-9)
+    add(seg, f2s(f) - int((pk - t0) * SR), 0.42, 0.08)
     cues.append(('knock', f))
 
-# restrained hinge creak while the door opens
-a_, b_ = EDL['creak']
-n = f2s(b_) - f2s(a_)
-tt = np.arange(n) / SR
-rate = 34 + 22 * np.sin(np.pi * tt / tt[-1]) + 5 * np.sin(2 * np.pi * 3.0 * tt)
-ph = np.cumsum(rate / SR)
-imp = np.zeros(n)
-ticks = np.nonzero(np.diff(np.floor(ph)) > 0)[0]
-imp[ticks] = np.random.default_rng(9).uniform(0.5, 1, len(ticks))
-res = sum(band(imp, fr * 0.85, fr * 1.15, 3) * g for fr, g in ((600, 1.0), (1150, 0.55), (2250, 0.22)))
-cr = res * np.sin(np.pi * np.clip(tt / tt[-1], 0, 1)) ** 1.5
-add(cr / np.abs(cr).max(), f2s(a_), 0.06, 0.15)
-cues.append(('creak', a_))
+# the old door creaks as the boy opens it wider
+CREAK = load_wav('sfx_creak.wav')
+cr = cut(CREAK, 0.0, 1.6, 0.01, 0.4)
+add(cr / (np.abs(cr).max() + 1e-9), f2s(EDL['creak'][0]), 0.12, 0.1)
+cues.append(('creak', EDL['creak'][0]))
 
 # ambience level, then the single spoken line on top (kept clearly intelligible)
 amb_peak = np.abs(mix).max()

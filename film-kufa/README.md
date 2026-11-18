@@ -20,14 +20,22 @@ Rendered film: `out/kufa-night-kindness.mp4`
 5. **Assembly:** in Remotion. `src/edl.json` lists the shot windows. Clips play at
    native speed, with gentle cross-fades into the last three shots and a fade to
    black over the final half-second.
-6. **Sound:** `scripts/make_audio.py` synthesizes night breeze, footsteps, cloth, the
-   bag settling, two soft knocks and a door creak on the frames in `edl.json`. No music.
+6. **Sound:** `scripts/make_audio.py` builds the mix on the frames in `edl.json`.
+   Footsteps, knocks and the door creak use realistic sound effects generated with
+   Mirelo SFX via Higgsfield (`audio_src/sfx_*.wav`): each sandal step is cut out
+   individually and placed on the frame where a foot is planted (frames 2, 22, 48,
+   72, 94, 270, 286), and the two knuckle knocks land on the frames where the fist
+   meets the door (207, 214), found by tracking the fist. The night breeze, cloth
+   rustle and the bag settling are synthesized. No music.
+7. **Pace:** the opening walk (`k1s.mp4`) is a regenerated, calmer take slowed to 0.8×
+   with motion-compensated interpolation (ffmpeg `minterpolate`), giving about one
+   step per second.
 
 ## Shots
 
 | Frames | Clip | Shot |
 |---|---|---|
-| 0–95 | k1 | Tracking behind him through the lantern-lit street, bag on his shoulder |
+| 0–95 | k1s | Tracking behind him (slow, measured pace) through the lantern-lit street, bag on his shoulder |
 | 96–203 | k2 | He leans, bends and lowers the heavy bag before the door, keeps a hand on it, lets go |
 | 204–287 | k3 | Two soft knocks; he steps back, turns away and walks off |
 | 288–359 | k4 | The boy opens the door, finds the bag, looks around, and a smile grows |
