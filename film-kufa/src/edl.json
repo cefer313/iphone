@@ -1,0 +1,24 @@
+{
+  "fps": 24,
+  "frames": 480,
+  "fadeOut": [468, 479],
+  "shots": [
+    {"name": "1 The walk", "clip": "k1.mp4", "from": 0, "dur": 96, "clipStart": 6},
+    {"name": "2 Placing the bag", "clip": "k2.mp4", "from": 96, "dur": 108, "clipStart": 10},
+    {"name": "3 Knock and leave", "clip": "k3.mp4", "from": 204, "dur": 84, "clipStart": 6},
+    {"name": "4 The child discovers it", "clip": "k4.mp4", "from": 288, "dur": 72, "clipStart": 30, "xfade": 8},
+    {"name": "5 The prayer", "clip": "k5.mp4", "from": 360, "dur": 78, "clipStart": 0, "xfade": 8},
+    {"name": "6 The peaceful street", "clip": "k6.mp4", "from": 438, "dur": 42, "clipStart": 24, "xfade": 12}
+  ],
+  "cues": {
+    "steps": [4, 17, 30, 43, 56, 69, 82, 252, 264, 276],
+    "stepGain": [0.11, 0.11, 0.11, 0.12, 0.12, 0.12, 0.12, 0.11, 0.09, 0.08],
+    "sack": 158,
+    "knocks": [205, 215],
+    "creak": [288, 304],
+    "cloth": [[98, 150, 0.8], [228, 270, 0.55], [362, 400, 0.45]],
+    "indoor": [0, 0],
+    "prayer": 366,
+    "fadeOut": [456, 480]
+  }
+}
