@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCurrentFrame } from 'remotion';
-import { COLORS, CONTACT, FONTS, PACKAGES, TEXT, TIMING } from '../config';
+import { COLORS, CONTACT, FONTS, PACKAGES, SYNC, TEXT, TIMING } from '../config';
 import { progress, Reveal, SceneShell } from '../components/anim';
 import { Body, CameraFrame, GoldLine, Kicker, PackageCard, ServiceItem, Title } from '../components/Elements';
 import { IconBadge } from '../components/Icon';
@@ -30,7 +30,7 @@ export const Scene1: React.FC = () => {
           ))}
         </div>
         <GoldLine start={62} width={260} />
-        <Reveal delay={78}>
+        <Reveal delay={SYNC.s1.services}>
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', columnGap: 22, rowGap: 8 }}>
             {t.services.map((s, i) => (
               <React.Fragment key={s}>
@@ -51,7 +51,7 @@ export const Scene1: React.FC = () => {
 export const Scene2: React.FC = () => {
   const frame = useCurrentFrame();
   const t = TEXT.s2;
-  const stepStart = (i: number) => 22 + i * 18;
+  const stepStart = (i: number) => SYNC.s2.steps[i];
   const rowH = 132;
   const lineP = progress(frame, stepStart(0) + 6, stepStart(t.steps.length - 1) - stepStart(0) + 10);
   return (
@@ -85,12 +85,12 @@ export const Scene2: React.FC = () => {
           ))}
         </div>
         <div>
-          <Reveal delay={128}>
+          <Reveal delay={SYNC.s2.accent[0]}>
             <Body size={54} weight={600} color={COLORS.warm}>
               {t.accent[0]}
             </Body>
           </Reveal>
-          <Reveal delay={140}>
+          <Reveal delay={SYNC.s2.accent[1]}>
             <Body size={54} weight={600} color={COLORS.gold}>
               {t.accent[1]}
             </Body>
@@ -110,9 +110,17 @@ export const Scene3: React.FC = () => (
       </Reveal>
       <GoldLine start={16} width={200} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: 34, marginTop: 8 }}>
-        {/* Kartlar 1, 3.3 və 5.7 saniyədə açılır; ~6.5 saniyədən sonra hər üçü sabit görünür. */}
+        {/* Kartlar ~4 saniyəyə qədər açılır və səhnənin son 10+ saniyəsində hər üçü görünür.
+            Diktor hansı paketi oxuyursa, o kart qızılı haşiyə ilə vurğulanır. */}
         {PACKAGES.map((pkg, i) => (
-          <PackageCard key={pkg.name} pkg={pkg} delay={30 + i * 70} />
+          <PackageCard
+            key={pkg.name}
+            pkg={pkg}
+            delay={SYNC.s3.cards[i]}
+            giftDelay={SYNC.s3.gift}
+            highlightFrom={SYNC.s3.highlight[i]}
+            highlightTo={SYNC.s3.highlight[i + 1]}
+          />
         ))}
       </div>
     </div>
@@ -129,7 +137,7 @@ export const Scene4: React.FC = () => (
       <GoldLine start={16} width={200} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: 30, marginTop: 8 }}>
         {TEXT.s4.items.map((it, i) => (
-          <ServiceItem key={it.title} icon={it.icon} title={it.title} sub={it.sub} delay={28 + i * 40} titleSize={54} />
+          <ServiceItem key={it.title} icon={it.icon} title={it.title} sub={it.sub} delay={SYNC.s4.items[i]} titleSize={54} />
         ))}
       </div>
     </div>

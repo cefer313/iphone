@@ -44,6 +44,14 @@ export const CONTACT = {
 };
 ```
 
+### Diktor səsi (qadın, Azərbaycan dili)
+Hər səhnənin mətni qadın səsi ilə oxunur: `public/voice/s1.mp3` … `s8.mp3`. Səslər Higgsfield-də (ElevenLabs mühərriki, "Elena" səsi) yaradılıb, oxunan mətnlər `src/config.ts` → `VOICE_SCRIPT`-dədir.
+
+- Animasiyalar diktorla sinxrondur: hər element diktor onu deyəndə açılır (`SYNC`). Paket kartları erkən açılır, diktor hansı paketi oxuyursa, o kart qızılı haşiyə ilə vurğulanır.
+- Diktor danışanda fon musiqisi avtomatik enir (`VOICE.musicDuck`).
+- Mətni dəyişsəniz: yeni səsi yaradın, faylı `public/voice/` qovluğunda əvəz edin, `VOICE.clips` içində `length` (saniyə) və lazım olsa `SYNC` kadrlarını yeniləyin.
+- Diktoru söndürmək: `VOICE.enabled = false`.
+
 ### Səs
 Fon musiqisi və bütün effektlər `scripts/generate-audio.py` ilə sıfırdan sintez olunub (`public/audio/`). Kənar səs faylı istifadə olunmayıb, ona görə lisenziya məhdudiyyəti yoxdur.
 

@@ -50,18 +50,62 @@ export const MUSIC = {
 };
 
 // Səs effektləri üçün ümumi səviyyə (0 = söndür, 1 = tam).
-export const SFX_VOLUME = 0.55;
+export const SFX_VOLUME = 0.45;
 
 // ─── SƏHNƏLƏRİN VAXTI (kadr, 30 FPS) ────────────────────────
 export const TIMING = {
   s1: { from: 0, duration: 210 }, // 0–7 san
-  s2: { from: 210, duration: 240 }, // 7–15 san
-  s3: { from: 450, duration: 540 }, // 15–33 san
-  s4: { from: 990, duration: 300 }, // 33–43 san
-  s5: { from: 1290, duration: 360 }, // 43–55 san
-  s6: { from: 1650, duration: 390 }, // 55–68 san
-  s7: { from: 2040, duration: 450 }, // 68–83 san
+  s2: { from: 210, duration: 330 }, // 7–18 san
+  s3: { from: 540, duration: 450 }, // 18–33 san
+  s4: { from: 990, duration: 270 }, // 33–42 san
+  s5: { from: 1260, duration: 420 }, // 42–56 san
+  s6: { from: 1680, duration: 390 }, // 56–69 san
+  s7: { from: 2070, duration: 420 }, // 69–83 san
   s8: { from: 2490, duration: 210 }, // 83–90 san
+};
+// Qeyd: səhnə müddətləri diktor mətninin uzunluğuna görə tənzimlənib (cəmi 2700 kadr = 90 san).
+
+// ─── DİKTOR SƏSİ (qadın, Azərbaycan dili) ───────────────────
+// Fayllar: public/voice/s1.mp3 … s8.mp3. Mətnlər VOICE_SCRIPT-dədir.
+// offset: səsin səhnə daxilində başladığı kadr · length: faylın uzunluğu (san)
+export const VOICE = {
+  enabled: true,
+  volume: 1,
+  musicDuck: 0.42, // diktor danışanda musiqi bu nisbətə enir
+  clips: {
+    s1: { file: 'voice/s1.mp3', offset: 15, length: 6.11 },
+    s2: { file: 'voice/s2.mp3', offset: 10, length: 10.03 },
+    s3: { file: 'voice/s3.mp3', offset: 12, length: 13.16 },
+    s4: { file: 'voice/s4.mp3', offset: 12, length: 7.0 },
+    s5: { file: 'voice/s5.mp3', offset: 12, length: 12.82 },
+    s6: { file: 'voice/s6.mp3', offset: 12, length: 11.96 },
+    s7: { file: 'voice/s7.mp3', offset: 12, length: 11.8 },
+    s8: { file: 'voice/s8.mp3', offset: 12, length: 5.15 },
+  },
+};
+
+export const VOICE_SCRIPT = {
+  s1: 'Markanızın dəyərini görünən edin. Çəkiliş, məzmun yaradılması və montaj.',
+  s2: 'Məqsəddən hazır videoya. Strategiya. İdeya. Ssenari. Çəkiliş. Montaj. Markanıza uyğun, auditoriyanıza xitab edən.',
+  s3: 'Aylıq əməkdaşlıq paketləri. Start: ayda dörd yüz manat, on video, üstəlik iki video hədiyyə. Pro: ayda yeddi yüz manat, iyirmi video. Premium: ayda min yüz manat, otuz video.',
+  s4: 'Bütün aylıq paketlərə daxildir: ödənişsiz konsultasiya, səhifə analizi və bazar araşdırması.',
+  s5: 'Hədəf auditoriyasının müəyyənləşdirilməsi. Kontent strategiyası və ssenarilər. Peşəkar çəkiliş və montaj. Əməkdaşlıq boyu mentorluq. Nə paylaşacağınızı birlikdə planlaşdırırıq.',
+  s6: 'Tək video sifarişi: yetmiş manatdan başlayan qiymətlərlə. İdeya, çəkiliş, montaj. Yekun qiymət formatdan, ssenaridən, çəkiliş məkanından və iş həcmindən asılıdır.',
+  s7: 'Bir çəkilişdə bir neçə məzmun. Bir saat yarımlıq çəkiliş: yüz əlli manat. İdeyalar, istiqamətləndirmə, çəkiliş və montaj daxildir. Video sayı format və ssenaridən asılıdır.',
+  s8: 'Markanız üçün növbəti addımı birlikdə ataq. Uyğun paketi seçmək üçün mənə yazın.',
+};
+
+// ─── SİNXRONLAMA: elementlərin açıldığı kadrlar (səhnə daxilində) ─
+// Diktorun hər ifadəsinin başlama anına uyğunlaşdırılıb.
+export const SYNC = {
+  s1: { services: 84 },
+  s2: { steps: [100, 125, 154, 178, 215], accent: [258, 270] },
+  // Kartlar tez açılır (son 9+ saniyədə hər üçü görünür); diktor hər paketi oxuyanda kart vurğulanır.
+  s3: { cards: [20, 60, 100], gift: 146, highlight: [82, 226, 319, 440] },
+  s4: { items: [72, 130, 170] },
+  s5: { items: [10, 104, 183, 252], accent: 312 },
+  s6: { price: 50, sub: 70, flow: [130, 148, 169], switchAt: 196, factors: [212, 227, 241, 316] },
+  s7: { card: 84, chime: 140, includes: 174, items: [180, 207, 234, 261], note: 286 },
 };
 
 // ─── SƏHNƏ MƏTNLƏRİ ─────────────────────────────────────────
@@ -149,39 +193,41 @@ export type Cue = { file: string; at: number; volume: number };
 const T = TIMING;
 const cue = (file: string, at: number, volume = 1): Cue => ({ file: `audio/${file}.wav`, at, volume });
 
+const Y = SYNC;
 export const SFX: Cue[] = [
   // Səhnə 1 — kamera çərçivəsi, başlıq, qızılı xətt
   cue('shutter', T.s1.from + 4, 0.7),
-  cue('whoosh', T.s1.from + 26, 0.45),
-  cue('chime', T.s1.from + 64, 0.45),
-  // Səhnə 2 — keçid, hər mərhələ üçün yüngül "tick", sonda vurğu
-  cue('whoosh', T.s2.from - 6, 0.5),
-  ...[0, 1, 2, 3, 4].map((i) => cue('tick', T.s2.from + 24 + i * 18, 0.55)),
-  cue('chime', T.s2.from + 130, 0.4),
-  // Səhnə 3 — hər paket kartı açılır; hədiyyə nişanı üçün zəng
-  cue('whoosh', T.s3.from - 6, 0.5),
-  ...[0, 1, 2].map((i) => cue('pop', T.s3.from + 32 + i * 70, 0.75)),
-  cue('chime', T.s3.from + 56, 0.5),
+  cue('whoosh', T.s1.from + 26, 0.4),
+  cue('chime', T.s1.from + 64, 0.35),
+  // Səhnə 2 — hər mərhələ diktor onu deyəndə "tick" ilə açılır
+  cue('whoosh', T.s2.from - 6, 0.45),
+  ...Y.s2.steps.map((f) => cue('tick', T.s2.from + f + 2, 0.5)),
+  cue('chime', T.s2.from + Y.s2.accent[0], 0.3),
+  // Səhnə 3 — kartlar açılır; hədiyyə nişanı üçün zəng
+  cue('whoosh', T.s3.from - 6, 0.45),
+  ...Y.s3.cards.map((f) => cue('pop', T.s3.from + f + 2, 0.65)),
+  cue('chime', T.s3.from + Y.s3.gift, 0.4),
   // Səhnə 4 — üç xidmət
-  cue('whoosh', T.s4.from - 6, 0.5),
-  ...[0, 1, 2].map((i) => cue('pop', T.s4.from + 30 + i * 40, 0.6)),
+  cue('whoosh', T.s4.from - 6, 0.45),
+  ...Y.s4.items.map((f) => cue('pop', T.s4.from + f + 2, 0.55)),
   // Səhnə 5 — dörd xidmət + yekun cümlə
-  cue('whoosh', T.s5.from - 6, 0.5),
-  ...[0, 1, 2, 3].map((i) => cue('pop', T.s5.from + 28 + i * 36, 0.6)),
-  cue('chime', T.s5.from + 192, 0.4),
+  cue('whoosh', T.s5.from - 6, 0.45),
+  ...Y.s5.items.map((f) => cue('pop', T.s5.from + f + 2, 0.55)),
+  cue('chime', T.s5.from + Y.s5.accent, 0.3),
   // Səhnə 6 — qiymət, iş axını, amillər
-  cue('whoosh', T.s6.from - 6, 0.5),
-  cue('chime', T.s6.from + 34, 0.5),
-  ...[0, 1, 2].map((i) => cue('tick', T.s6.from + 80 + i * 18, 0.5)),
-  cue('whoosh', T.s6.from + 186, 0.35),
-  ...[0, 1, 2, 3].map((i) => cue('tick', T.s6.from + 220 + i * 16, 0.45)),
-  // Səhnə 7 — qiymət kartı, saat əqrəbinin hərəkəti, siyahı, qeyd
-  cue('whoosh', T.s7.from - 6, 0.5),
-  cue('chime', T.s7.from + 30, 0.5),
-  ...Array.from({ length: 10 }, (_, i) => cue('clock', T.s7.from + 42 + i * 6, 0.5 - i * 0.03)),
-  ...[0, 1, 2, 3].map((i) => cue('tick', T.s7.from + 86 + i * 18, 0.5)),
-  cue('pop', T.s7.from + 290, 0.5),
+  cue('whoosh', T.s6.from - 6, 0.45),
+  cue('chime', T.s6.from + Y.s6.price + 4, 0.4),
+  ...Y.s6.flow.map((f) => cue('tick', T.s6.from + f + 2, 0.45)),
+  cue('whoosh', T.s6.from + Y.s6.switchAt - 10, 0.3),
+  ...Y.s6.factors.map((f) => cue('tick', T.s6.from + f + 2, 0.4)),
+  // Səhnə 7 — qiymət kartı, saat əqrəbi, siyahı, qeyd
+  cue('whoosh', T.s7.from - 6, 0.45),
+  cue('pop', T.s7.from + Y.s7.card + 2, 0.5),
+  ...Array.from({ length: 10 }, (_, i) => cue('clock', T.s7.from + Y.s7.card + 18 + i * 6, 0.45 - i * 0.03)),
+  cue('chime', T.s7.from + Y.s7.chime, 0.4),
+  ...Y.s7.items.map((f) => cue('tick', T.s7.from + f + 2, 0.45)),
+  cue('pop', T.s7.from + Y.s7.note + 2, 0.45),
   // Səhnə 8 — dəvət və yekun akkord
-  cue('whoosh', T.s8.from - 6, 0.5),
-  cue('chime-final', T.s8.from + 36, 0.55),
+  cue('whoosh', T.s8.from - 6, 0.45),
+  cue('chime-final', T.s8.from + 36, 0.5),
 ];

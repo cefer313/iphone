@@ -184,10 +184,22 @@ export const Timeline: React.FC<{ start: number; width?: number; height?: number
 };
 
 // ─── Paket kartı ─────────────────────────────────────────────
-export const PackageCard: React.FC<{ pkg: Pkg; delay: number }> = ({ pkg, delay }) => {
+export const PackageCard: React.FC<{ pkg: Pkg; delay: number; giftDelay?: number; highlightFrom?: number; highlightTo?: number }> = ({
+  pkg,
+  delay,
+  giftDelay,
+  highlightFrom,
+  highlightTo,
+}) => {
   const frame = useCurrentFrame();
-  // Kart açılarkən haşiyə qısa müddət qızılı işıqlanır, sonra sakitləşir.
-  const glow = interpolate(frame, [delay, delay + 20, delay + 70], [0, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const c = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
+  // Açılış zamanı qısa işıq + diktor bu paketi oxuyarkən yumşaq qızılı vurğu.
+  const openGlow = interpolate(frame, [delay, delay + 20, delay + 60], [0, 0.7, 0], c);
+  const speakGlow =
+    highlightFrom !== undefined && highlightTo !== undefined
+      ? interpolate(frame, [highlightFrom - 6, highlightFrom + 12, highlightTo - 12, highlightTo], [0, 1, 1, 0], c)
+      : 0;
+  const glow = Math.max(openGlow, speakGlow);
   return (
     <Reveal delay={delay} y={60} duration={30}>
       <div
@@ -215,6 +227,7 @@ export const PackageCard: React.FC<{ pkg: Pkg; delay: number }> = ({ pkg, delay 
           <div style={{ fontFamily: FONTS.body, fontWeight: 500, fontSize: 44, color: COLORS.muted }}>{pkg.period}</div>
         </div>
         {pkg.gift && (
+          <Reveal delay={giftDelay ?? delay} y={16} style={{ alignSelf: 'flex-start' }}>
           <div
             style={{
               alignSelf: 'flex-start',
@@ -227,9 +240,10 @@ export const PackageCard: React.FC<{ pkg: Pkg; delay: number }> = ({ pkg, delay 
               border: `1.5px solid ${COLORS.goldLine}`,
             }}
           >
-            <Icon name="gift" size={42} drawStart={delay + 24} />
+            <Icon name="gift" size={42} drawStart={(giftDelay ?? delay) + 4} />
             <div style={{ fontFamily: FONTS.body, fontWeight: 600, fontSize: 40, color: COLORS.gold }}>{pkg.gift}</div>
           </div>
+          </Reveal>
         )}
       </div>
     </Reveal>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
-import { COLORS, CONTACT, FONTS, TEXT, TIMING } from '../config';
+import { COLORS, CONTACT, FONTS, SYNC, TEXT, TIMING } from '../config';
 import { progress, Reveal, SceneShell } from '../components/anim';
 import { Body, CameraFrame, cardStyle, GoldLine, Kicker, ServiceItem, Timeline, Title } from '../components/Elements';
 import { Icon } from '../components/Icon';
@@ -19,10 +19,10 @@ export const Scene5: React.FC = () => {
         <GoldLine start={16} width={200} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 4 }}>
           {t.items.map((it, i) => (
-            <ServiceItem key={it.title} icon={it.icon} title={it.title} sub={it.sub} delay={26 + i * 36} titleSize={48} />
+            <ServiceItem key={it.title} icon={it.icon} title={it.title} sub={it.sub} delay={SYNC.s5.items[i]} titleSize={48} />
           ))}
         </div>
-        <Reveal delay={190}>
+        <Reveal delay={SYNC.s5.accent}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 22, marginTop: 6 }}>
             <div style={{ width: 6, alignSelf: 'stretch', borderRadius: 3, background: COLORS.gold }} />
             <Body size={50} weight={600} color={COLORS.gold}>
@@ -39,7 +39,7 @@ export const Scene5: React.FC = () => {
 export const Scene6: React.FC = () => {
   const frame = useCurrentFrame();
   const t = TEXT.s6;
-  const SWITCH = 196; // ~6.5 san: qiymət hissəsindən "nədən asılıdır" hissəsinə keçid
+  const SWITCH = SYNC.s6.switchAt; // diktor "Yekun qiymət" deyəndə keçid
   const partA = interpolate(frame, [SWITCH - 16, SWITCH], [1, 0], clamp);
   return (
     <SceneShell duration={TIMING.s6.duration} justify="flex-start">
@@ -53,7 +53,7 @@ export const Scene6: React.FC = () => {
       {/* Hissə A: qiymət və iş axını */}
       {frame < SWITCH && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 44, marginTop: 80, opacity: partA }}>
-          <Reveal delay={30} y={40}>
+          <Reveal delay={SYNC.s6.price} y={40}>
             <div style={{ ...cardStyle(true), padding: '46px 48px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', whiteSpace: 'nowrap' }}>
                 <span style={{ fontFamily: FONTS.display, fontWeight: 800, fontSize: 118, lineHeight: 1.05, color: COLORS.gold, letterSpacing: '-0.02em' }}>
@@ -68,7 +68,7 @@ export const Scene6: React.FC = () => {
               </Body>
             </div>
           </Reveal>
-          <Reveal delay={54}>
+          <Reveal delay={SYNC.s6.sub}>
             <Body size={44} color={COLORS.muted}>
               {t.sub}
             </Body>
@@ -77,11 +77,11 @@ export const Scene6: React.FC = () => {
             {t.flow.map((step, i) => (
               <React.Fragment key={step}>
                 {i > 0 && (
-                  <Reveal delay={78 + i * 18 - 6} y={0} blur={false}>
-                    <Icon name="arrow" size={46} drawStart={78 + i * 18 - 6} drawDuration={16} />
+                  <Reveal delay={SYNC.s6.flow[i] - 6} y={0} blur={false}>
+                    <Icon name="arrow" size={46} drawStart={SYNC.s6.flow[i] - 6} drawDuration={16} />
                   </Reveal>
                 )}
-                <Reveal delay={78 + i * 18} y={24}>
+                <Reveal delay={SYNC.s6.flow[i]} y={24}>
                   <div style={{ padding: '18px 30px', borderRadius: 999, border: `1.5px solid ${COLORS.goldLine}`, background: COLORS.goldSoft }}>
                     <Body size={44} weight={600}>
                       {step}
@@ -104,7 +104,7 @@ export const Scene6: React.FC = () => {
           </Reveal>
           <div style={{ ...cardStyle(), padding: '20px 44px', opacity: progress(frame, SWITCH + 10, 24) }}>
             {t.factors.map((f, i) => (
-              <Reveal key={f} delay={SWITCH + 22 + i * 16} y={24}>
+              <Reveal key={f} delay={SYNC.s6.factors[i]} y={24}>
                 <div
                   style={{
                     display: 'flex',
@@ -161,7 +161,8 @@ const Clock: React.FC<{ start: number }> = ({ start }) => {
 
 export const Scene7: React.FC = () => {
   const t = TEXT.s7;
-  const NOTE_AT = TIMING.s7.duration - 150 - 10; // son 5 saniyədən bir az əvvəl tam görünür
+  const NOTE_AT = SYNC.s7.note; // diktor qeydi oxuyanda; son 5 saniyədə tam görünür
+  const CARD = SYNC.s7.card;
   return (
     <SceneShell duration={TIMING.s7.duration} justify="center">
       <div style={{ display: 'flex', flexDirection: 'column', gap: 34 }}>
@@ -169,10 +170,10 @@ export const Scene7: React.FC = () => {
           <Title size={80}>{t.title}</Title>
         </Reveal>
 
-        <Reveal delay={26} y={40}>
+        <Reveal delay={CARD} y={40}>
           <div style={{ ...cardStyle(true), padding: '40px 46px', display: 'flex', flexDirection: 'column', gap: 30 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 38 }}>
-              <Clock start={30} />
+              <Clock start={CARD + 4} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <Body size={50} weight={600}>
                   {t.duration}
@@ -182,18 +183,18 @@ export const Scene7: React.FC = () => {
                 </div>
               </div>
             </div>
-            <Timeline start={44} width={808} height={96} playheadFrom={70} playheadTo={NOTE_AT} />
+            <Timeline start={CARD + 18} width={808} height={96} playheadFrom={CARD + 40} playheadTo={NOTE_AT} />
           </div>
         </Reveal>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <Reveal delay={70}>
+          <Reveal delay={SYNC.s7.includes}>
             <Kicker style={{ letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 8 }}>{t.includesLabel}</Kicker>
           </Reveal>
           {t.includes.map((item, i) => {
             const hl = i === t.highlightIndex;
             return (
-              <Reveal key={item} delay={84 + i * 18} y={24}>
+              <Reveal key={item} delay={SYNC.s7.items[i]} y={24}>
                 <div
                   style={{
                     display: 'flex',
@@ -207,7 +208,7 @@ export const Scene7: React.FC = () => {
                     border: hl ? `1.5px solid ${COLORS.goldLine}` : '1.5px solid transparent',
                   }}
                 >
-                  <Icon name="check" size={46} drawStart={84 + i * 18 + 4} drawDuration={18} />
+                  <Icon name="check" size={46} drawStart={SYNC.s7.items[i] + 4} drawDuration={18} />
                   <Body size={46} weight={hl ? 700 : 500} color={COLORS.warm}>
                     {item}
                   </Body>
