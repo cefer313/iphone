@@ -44,8 +44,23 @@ export const CONTACT = {
 };
 ```
 
-### Musiqi
-İstifadə hüququnuz olan instrumental faylı `public/` qovluğuna qoyun və `MUSIC.file` sahəsinə adını yazın (məs. `'fon.mp3'`). Səs aşağı səviyyədədir (`volume: 0.18`), girişdə və sonda yumşaq keçir. Sahə boşdursa, video səssizdir.
+### Səs
+Fon musiqisi və bütün effektlər `scripts/generate-audio.py` ilə sıfırdan sintez olunub (`public/audio/`). Kənar səs faylı istifadə olunmayıb, ona görə lisenziya məhdudiyyəti yoxdur.
+
+| Səs | Harada səslənir |
+|---|---|
+| `music.wav` | Sakit ambient fon (D major), bütün video boyu, aşağı səviyyədə |
+| `shutter.wav` | Səhnə 1 — kamera çərçivəsi yaranarkən |
+| `whoosh.wav` | Səhnələr arası keçidlər |
+| `tick.wav` | Mərhələlər, iş axını və siyahı elementləri |
+| `pop.wav` | Paket kartları və xidmət kartları açılarkən |
+| `chime.wav` | Qiymətlər, hədiyyə nişanı və vurğulanan cümlələr |
+| `clock.wav` | Səhnə 7 — saat əqrəbi fırlanarkən |
+| `chime-final.wav` | Səhnə 8 — yekun akkord |
+
+- Səsləri yenidən yaratmaq: `python3 scripts/generate-audio.py` (numpy lazımdır).
+- Effektlərin vaxtı və səviyyəsi: `src/config.ts` → `SFX`. Hamısını söndürmək: `SFX_VOLUME = 0`.
+- Öz musiqinizi istifadə etmək: faylı `public/` qovluğuna qoyub `MUSIC.file` sahəsinə adını yazın. Musiqini tam söndürmək üçün sahəni boş saxlayın.
 
 ## Struktur
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, Audio, interpolate, Sequence, staticFile } from 'remotion';
-import { MUSIC, TIMING, VIDEO } from './config';
+import { MUSIC, SFX, SFX_VOLUME, TIMING, VIDEO } from './config';
 import { Backdrop } from './components/Elements';
 import { Scene1, Scene2, Scene3, Scene4 } from './scenes/Scenes1to4';
 import { Scene5, Scene6, Scene7, Scene8 } from './scenes/Scenes5to8';
@@ -36,5 +36,11 @@ export const Teqdimat: React.FC = () => (
         }
       />
     ) : null}
+    {SFX_VOLUME > 0 &&
+      SFX.map((c, i) => (
+        <Sequence key={`sfx-${i}`} from={c.at} durationInFrames={VIDEO.durationInFrames - c.at} name={`sfx ${c.file}`} layout="none">
+          <Audio src={staticFile(c.file)} volume={c.volume * SFX_VOLUME} />
+        </Sequence>
+      ))}
   </AbsoluteFill>
 );

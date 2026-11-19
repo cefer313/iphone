@@ -41,12 +41,16 @@ export const CONTACT = {
 };
 
 // ─── FON MUSİQİSİ ───────────────────────────────────────────
-// İstifadəsinə icazəniz olan faylı public/ qovluğuna qoyun və adını yazın.
-// Boş qalarsa, video səssiz render olunur.
+// public/audio/music.wav — scripts/generate-audio.py ilə sintez olunub (lisenziyasız, öz səsimiz).
+// Başqa musiqi istifadə etmək üçün faylı public/ qovluğuna qoyub adını yazın.
+// Boş qalarsa, fon musiqisi olmur.
 export const MUSIC = {
-  file: '',
-  volume: 0.18,
+  file: 'audio/music.wav',
+  volume: 0.32,
 };
+
+// Səs effektləri üçün ümumi səviyyə (0 = söndür, 1 = tam).
+export const SFX_VOLUME = 0.55;
 
 // ─── SƏHNƏLƏRİN VAXTI (kadr, 30 FPS) ────────────────────────
 export const TIMING = {
@@ -136,4 +140,48 @@ export const PACKAGES: Pkg[] = [
   { name: 'START', price: '400 AZN', period: '/ ay', videos: '10 video', gift: '+ 2 video hədiyyə' },
   { name: 'PRO', price: '700 AZN', period: '/ ay', videos: '20 video' },
   { name: 'PREMIUM', price: '1100 AZN', period: '/ ay', videos: '30 video' },
+];
+
+// ─── SƏS EFFEKTLƏRİ (hər biri animasiya ilə eyni kadrda) ───────
+// file: public/audio içindəki fayl · at: kadr · volume: nisbi səviyyə
+export type Cue = { file: string; at: number; volume: number };
+
+const T = TIMING;
+const cue = (file: string, at: number, volume = 1): Cue => ({ file: `audio/${file}.wav`, at, volume });
+
+export const SFX: Cue[] = [
+  // Səhnə 1 — kamera çərçivəsi, başlıq, qızılı xətt
+  cue('shutter', T.s1.from + 4, 0.7),
+  cue('whoosh', T.s1.from + 26, 0.45),
+  cue('chime', T.s1.from + 64, 0.45),
+  // Səhnə 2 — keçid, hər mərhələ üçün yüngül "tick", sonda vurğu
+  cue('whoosh', T.s2.from - 6, 0.5),
+  ...[0, 1, 2, 3, 4].map((i) => cue('tick', T.s2.from + 24 + i * 18, 0.55)),
+  cue('chime', T.s2.from + 130, 0.4),
+  // Səhnə 3 — hər paket kartı açılır; hədiyyə nişanı üçün zəng
+  cue('whoosh', T.s3.from - 6, 0.5),
+  ...[0, 1, 2].map((i) => cue('pop', T.s3.from + 32 + i * 70, 0.75)),
+  cue('chime', T.s3.from + 56, 0.5),
+  // Səhnə 4 — üç xidmət
+  cue('whoosh', T.s4.from - 6, 0.5),
+  ...[0, 1, 2].map((i) => cue('pop', T.s4.from + 30 + i * 40, 0.6)),
+  // Səhnə 5 — dörd xidmət + yekun cümlə
+  cue('whoosh', T.s5.from - 6, 0.5),
+  ...[0, 1, 2, 3].map((i) => cue('pop', T.s5.from + 28 + i * 36, 0.6)),
+  cue('chime', T.s5.from + 192, 0.4),
+  // Səhnə 6 — qiymət, iş axını, amillər
+  cue('whoosh', T.s6.from - 6, 0.5),
+  cue('chime', T.s6.from + 34, 0.5),
+  ...[0, 1, 2].map((i) => cue('tick', T.s6.from + 80 + i * 18, 0.5)),
+  cue('whoosh', T.s6.from + 186, 0.35),
+  ...[0, 1, 2, 3].map((i) => cue('tick', T.s6.from + 220 + i * 16, 0.45)),
+  // Səhnə 7 — qiymət kartı, saat əqrəbinin hərəkəti, siyahı, qeyd
+  cue('whoosh', T.s7.from - 6, 0.5),
+  cue('chime', T.s7.from + 30, 0.5),
+  ...Array.from({ length: 10 }, (_, i) => cue('clock', T.s7.from + 42 + i * 6, 0.5 - i * 0.03)),
+  ...[0, 1, 2, 3].map((i) => cue('tick', T.s7.from + 86 + i * 18, 0.5)),
+  cue('pop', T.s7.from + 290, 0.5),
+  // Səhnə 8 — dəvət və yekun akkord
+  cue('whoosh', T.s8.from - 6, 0.5),
+  cue('chime-final', T.s8.from + 36, 0.55),
 ];
