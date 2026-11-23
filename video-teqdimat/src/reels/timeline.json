@@ -1,0 +1,184 @@
+{
+  "fps": 30,
+  "total": 1746,
+  "scenes": [
+    {
+      "id": "s1",
+      "from": 0,
+      "duration": 179,
+      "voice": "reels/voice/v1.mp3",
+      "voiceOffset": 5,
+      "clipRate": 0.838,
+      "voiceSec": 5.41
+    },
+    {
+      "id": "s2",
+      "from": 179,
+      "duration": 129,
+      "voice": "reels/voice/v2.mp3",
+      "voiceOffset": 5,
+      "clipRate": 1.0,
+      "voiceSec": 3.94
+    },
+    {
+      "id": "s3",
+      "from": 308,
+      "duration": 138,
+      "voice": "reels/voice/v3.mp3",
+      "voiceOffset": 5,
+      "clipRate": 1.0,
+      "voiceSec": 4.23
+    },
+    {
+      "id": "s4",
+      "from": 446,
+      "duration": 154,
+      "voice": "reels/voice/v4.mp3",
+      "voiceOffset": 5,
+      "clipRate": 0.974,
+      "voiceSec": 4.78
+    },
+    {
+      "id": "s5",
+      "from": 600,
+      "duration": 163,
+      "voice": "reels/voice/v5.mp3",
+      "voiceOffset": 5,
+      "clipRate": 0.9202,
+      "voiceSec": 5.07
+    },
+    {
+      "id": "s6",
+      "from": 763,
+      "duration": 177,
+      "voice": "reels/voice/v6.mp3",
+      "voiceOffset": 5,
+      "clipRate": 0.8475,
+      "voiceSec": 5.2
+    },
+    {
+      "id": "s7",
+      "from": 940,
+      "duration": 143,
+      "voice": "reels/voice/v7.mp3",
+      "voiceOffset": 5,
+      "clipRate": 1.0,
+      "voiceSec": 4.41
+    },
+    {
+      "id": "s8",
+      "from": 1083,
+      "duration": 223,
+      "voice": "reels/voice/v8.mp3",
+      "voiceOffset": 5,
+      "clipRate": 0.6726,
+      "voiceSec": 7.08
+    },
+    {
+      "id": "s9",
+      "from": 1306,
+      "duration": 188,
+      "voice": "reels/voice/v9.mp3",
+      "voiceOffset": 5,
+      "clipRate": 0.7979,
+      "voiceSec": 5.9
+    },
+    {
+      "id": "s10",
+      "from": 1494,
+      "duration": 252,
+      "voice": "reels/voice/v10.mp3",
+      "voiceOffset": 5,
+      "clipRate": 0.5952,
+      "voiceSec": 5.54
+    }
+  ],
+  "music": "reels/audio/music.wav",
+  "sfx": [
+    {
+      "file": "reels/audio/whoosh.wav",
+      "at": 0,
+      "volume": 0.35
+    },
+    {
+      "file": "reels/audio/ping.wav",
+      "at": 316,
+      "volume": 0.55
+    },
+    {
+      "file": "reels/audio/ping.wav",
+      "at": 374,
+      "volume": 0.55
+    },
+    {
+      "file": "reels/audio/ping.wav",
+      "at": 454,
+      "volume": 0.55
+    },
+    {
+      "file": "reels/audio/ping.wav",
+      "at": 519,
+      "volume": 0.55
+    },
+    {
+      "file": "reels/audio/ping.wav",
+      "at": 608,
+      "volume": 0.55
+    },
+    {
+      "file": "reels/audio/ping.wav",
+      "at": 650,
+      "volume": 0.55
+    },
+    {
+      "file": "reels/audio/ping.wav",
+      "at": 692,
+      "volume": 0.55
+    },
+    {
+      "file": "reels/audio/riser.wav",
+      "at": 895,
+      "volume": 0.5
+    },
+    {
+      "file": "reels/audio/impact.wav",
+      "at": 940,
+      "volume": 0.6
+    },
+    {
+      "file": "reels/audio/pop.wav",
+      "at": 1087,
+      "volume": 0.35
+    },
+    {
+      "file": "reels/audio/pop.wav",
+      "at": 1096,
+      "volume": 0.35
+    },
+    {
+      "file": "reels/audio/pop.wav",
+      "at": 1105,
+      "volume": 0.35
+    },
+    {
+      "file": "reels/audio/pop.wav",
+      "at": 1114,
+      "volume": 0.35
+    },
+    {
+      "file": "reels/audio/pop.wav",
+      "at": 1123,
+      "volume": 0.35
+    },
+    {
+      "file": "reels/audio/pop.wav",
+      "at": 1132,
+      "volume": 0.35
+    },
+    {
+      "file": "reels/audio/chime.wav",
+      "at": 1590,
+      "volume": 0.5
+    }
+  ]
+}
