@@ -8,10 +8,5 @@
 | `unknown-benefactor.mp4` | "Unknown Benefactor" (Higgsfield/Kling + Remotion) | 20 san |
 | `kufa-night-kindness.mp4` | "Kufa Night" (Higgsfield/Kling + ElevenLabs + Remotion) | 20 san |
 
-Son üç filmin mənbə layihələri (`film/`, `film-ai/`, `film-kufa/`, `film3d/`) arxiv etiketində saxlanılır:
-`archive/confident-cray-07o93z`. Lazım olsa:
-
-```bash
-git fetch origin tag archive/confident-cray-07o93z
-git checkout archive/confident-cray-07o93z -- film-kufa
-```
+Son üç filmin mənbə layihələri (`film/`, `film-ai/`, `film-kufa/`, `film3d/`) GitHub-da
+`claude/confident-cray-07o93z` budağında saxlanılır. Həmin budağı silməyin — mənbələr yalnız oradadır.
