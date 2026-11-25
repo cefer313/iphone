@@ -3,6 +3,7 @@
 Bu repozitoriya istifadəçinin müxtəlif layihələridir: sayt və mobil tətbiq, video təqdimatlar və reklamlar,
 animasiya videoları. Dil materialları burada **deyil** — onlar ayrıca repozitoriyalardadır:
 `cefer313/ingilis_dili` (ingilis dili), `cefer313/fars-dili` (fars dili), `cefer313/-r-b-dili` (ərəb dili).
+Yeni saytlar, tətbiqlər və oyunlar `cefer313/web-program` repozitoriyasında hazırlanır.
 
 Bu fayldakı qaydalara hər söhbətdə əməl et.
 
@@ -65,3 +66,4 @@ Bu repozitoriyada dil dərsliyi istənsə, uyğun repozitoriyanı söhbətə qo�
 
 - 2026-11-25 — Bu fayl yaradıldı; yuxarıdakı qaydalar əvvəlki işlərdən toplandı.
 - 2026-11-25 — Dil materialları ayrıca repozitoriyalara köçürüldü (ingilis_dili, fars-dili, -r-b-dili).
+- 2026-11-25 — Saytlar/tətbiqlər/oyunlar üçün `web-program` repozitoriyası yaradıldı.
