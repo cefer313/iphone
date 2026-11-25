@@ -1,0 +1,17 @@
+{
+  "name": "Baxışını dəyiş",
+  "short_name": "Baxışını dəyiş",
+  "description": "Motivasiya və şəxsi inkişaf",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbf8f3",
+  "theme_color": "#1d3b3a",
+  "lang": "az",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

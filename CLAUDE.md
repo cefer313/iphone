@@ -1,9 +1,8 @@
 # iphone — Claude üçün təlimat
 
-Bu repozitoriya istifadəçinin müxtəlif layihələridir: sayt və mobil tətbiq, video təqdimatlar və reklamlar,
-animasiya videoları. Dil materialları burada **deyil** — onlar ayrıca repozitoriyalardadır:
+Bu repozitoriya istifadəçinin video layihələridir: video təqdimatlar və reklamlar, animasiya videoları. Dil materialları burada **deyil** — onlar ayrıca repozitoriyalardadır:
 `cefer313/ingilis_dili` (ingilis dili), `cefer313/fars-dili` (fars dili), `cefer313/-r-b-dili` (ərəb dili).
-Yeni saytlar, tətbiqlər və oyunlar `cefer313/web-program` repozitoriyasında hazırlanır.
+Saytlar, tətbiqlər və oyunlar (o cümlədən "Baxışını dəyiş") `cefer313/web-program` repozitoriyasındadır.
 
 Bu fayldakı qaydalara hər söhbətdə əməl et.
 
@@ -22,8 +21,6 @@ Bu fayldakı qaydalara hər söhbətdə əməl et.
 
 | Qovluq / fayl | Nədir |
 |---|---|
-| `www/` | "Baxışını dəyiş" saytı (AZ/RU/EN), PWA. Mətnlər: `www/js/i18n.js` |
-| `android/`, `ios/`, `capacitor.config.json` | Saytın Capacitor ilə mobil tətbiqi. Android APK GitHub Actions-da yığılır |
 | `video-teqdimat/` | Remotion layihəsi: xidmət təqdimatı videosu (`Teqdimat`) və mühasibatlıq Reels reklamı (`MuhasibReels`). Bütün mətnlər/qiymətlər `src/config.ts` və `src/reels/content.ts`-dədir |
 | `videolar/` | Hazır animasiya videoları və filmlər (siyahı: `videolar/README.md`) |
 
@@ -66,4 +63,4 @@ Bu repozitoriyada dil dərsliyi istənsə, uyğun repozitoriyanı söhbətə qo�
 
 - 2026-11-25 — Bu fayl yaradıldı; yuxarıdakı qaydalar əvvəlki işlərdən toplandı.
 - 2026-11-25 — Dil materialları ayrıca repozitoriyalara köçürüldü (ingilis_dili, fars-dili, -r-b-dili).
-- 2026-11-25 — Saytlar/tətbiqlər/oyunlar üçün `web-program` repozitoriyası yaradıldı.
+- 2026-11-25 — Saytlar/tətbiqlər/oyunlar üçün `web-program` repozitoriyası yaradıldı; "Baxışını dəyiş" saytı/tətbiqi ora köçürüldü.
