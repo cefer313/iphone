@@ -1,8 +1,8 @@
 # iphone — Claude üçün təlimat
 
 Bu repozitoriya istifadəçinin müxtəlif layihələridir: sayt və mobil tətbiq, video təqdimatlar və reklamlar,
-ərəb dili dərs materialları, animasiya videoları. İngilis dili materialları burada **deyil** — onlar
-ayrıca `cefer313/ingilis_dili` repozitoriyasındadır.
+animasiya videoları. Dil materialları burada **deyil** — onlar ayrıca repozitoriyalardadır:
+`cefer313/ingilis_dili` (ingilis dili), `cefer313/fars-dili` (fars dili), `cefer313/-r-b-dili` (ərəb dili).
 
 Bu fayldakı qaydalara hər söhbətdə əməl et.
 
@@ -24,17 +24,12 @@ Bu fayldakı qaydalara hər söhbətdə əməl et.
 | `www/` | "Baxışını dəyiş" saytı (AZ/RU/EN), PWA. Mətnlər: `www/js/i18n.js` |
 | `android/`, `ios/`, `capacitor.config.json` | Saytın Capacitor ilə mobil tətbiqi. Android APK GitHub Actions-da yığılır |
 | `video-teqdimat/` | Remotion layihəsi: xidmət təqdimatı videosu (`Teqdimat`) və mühasibatlıq Reels reklamı (`MuhasibReels`). Bütün mətnlər/qiymətlər `src/config.ts` və `src/reels/content.ts`-dədir |
-| `erebce-ders-1-cins-ve-hallar.pdf` | Ərəb dili, Dərs 1: cins və ismin halı |
-| `videolar/` | Hazır animasiya videoları (məscid səcdə səhnəsi, "A Prayer for the Ummah") |
+| `videolar/` | Hazır animasiya videoları və filmlər (siyahı: `videolar/README.md`) |
 
-## Ərəb dili dərslikləri
+## Dil dərslikləri
 
-- Format: rəngli, öz dizaynında **A4 PDF**. Quruluş: üz qabığı → **lüğət (~20 söz)** → qaydalar → **çalışmalar** → **cavablar**.
-- **Yalnız istifadəçinin verdiyi qaydaları** yaz; öz tərəfindən yeni qayda əlavə etmə.
-- Oxunuşları istifadəçinin yazdığı kimi saxla (məs. kitabun, kitabin, kitabən, mədrasətun, mədrasətən; Raf'un, Cərrun, Nasbun).
-- Ərəb mətnləri tam hərəkəli yazılır.
-- Rəng məntiqi: müzəkkər — mavi, müənnəs — çəhrayı; raf' — yaşıl, cərr — bənövşəyi, nasb — narıncı.
-- Texniki: PDF-i HTML-dən brauzer (Playwright/Chromium) ilə yarat ki, ərəb hərfləri düzgün birləşsin. Şriftlər: ərəbcə **Amiri**, latın **Inter / Montserrat** (`@fontsource` paketləri). Hər səhifənin sığdığını yoxla.
+Ərəb, fars və ingilis dili materialları öz repozitoriyalarına yazılır; qaydaları həmin repozitoriyaların `CLAUDE.md` faylındadır.
+Bu repozitoriyada dil dərsliyi istənsə, uyğun repozitoriyanı söhbətə qoş və işi orada gör.
 
 ## Videolar və reklamlar
 
@@ -69,3 +64,4 @@ Bu fayldakı qaydalara hər söhbətdə əməl et.
 ### Əlavə olunmuş qaydalar (tarixlə)
 
 - 2026-11-25 — Bu fayl yaradıldı; yuxarıdakı qaydalar əvvəlki işlərdən toplandı.
+- 2026-11-25 — Dil materialları ayrıca repozitoriyalara köçürüldü (ingilis_dili, fars-dili, -r-b-dili).
